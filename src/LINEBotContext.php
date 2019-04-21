@@ -21,7 +21,7 @@ class LINEBotContext extends LINEMessageBuilder
 
     public function getMessagePayload()
     {
-        return $this->isMessageEvent ? $this->rawEvent['message'] : null;
+        return $this->isMessageEvent() ? $this->rawEvent['message'] : null;
     }
 
     public function getPostbackPayload()

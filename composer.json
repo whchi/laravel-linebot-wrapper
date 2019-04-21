@@ -1,0 +1,23 @@
+{
+    "name": "whchi/laravel-linebot-wrapper",
+    "description": "A simple laravel wrapper for linecorp/line-bot-sdk",
+    "type": "library",
+    "require": {
+        "laravel/framework": "5.5.*",
+        "linecorp/line-bot-sdk": "3.*",
+        "predis/predis": "^1.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "whchi",
+            "email": "whccchi@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+          "Whchi\\LaravelLineBotWrapper\\": "src/"
+        }
+      }
+}

@@ -39,11 +39,6 @@ class LINEBotContext extends LINEMessageBuilder
         Log::debug($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
     }
 
-    public function getRawEvent()
-    {
-        return $this->rawEvent;
-    }
-
     /**
      * event checkers
      */

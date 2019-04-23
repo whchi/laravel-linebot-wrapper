@@ -136,7 +136,7 @@ $this->context->pushFlex(string $altText, array $flexTemplate)
 ### reply API
 Change `pushXXXX` to `replyXXXX` without setting userId, that is.
 ### other usage
-* detect event
+* detect event\
 more detail see [official doc](https://developers.line.biz/en/reference/messaging-api/#message-event)
 ```php
 $this->context->isXXXXEvent();
@@ -159,14 +159,21 @@ $this->content->getMessagePayload();
 ```
 * get postback data
 ```php
-$this->context->getPostbackPayloads();
+$this->context->getPostbackPayload();
 ```
-* get user profile
+* get user profile\
 more detail see [official doc](https://developers.line.biz/en/reference/messaging-api/#get-profile)
 ```php
 $this->context->getUserProfile();
 ```
-* get raw event
+* accessable attributes
 ```php
-$this->context->getRawEvent();
+$this->context->rawEvent;
+$this->context->replyToken;
+$this->context->eventType;
+$this->context->sourceType;
+$this->context->userId;
+$this->context->groupId;
+$this->context->roomId;
+$this->context->messageEventType;
 ```

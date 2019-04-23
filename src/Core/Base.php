@@ -4,6 +4,7 @@ namespace Whchi\LaravelLineBotWrapper\Core;
 
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
+use Log;
 
 class Base
 {
@@ -81,5 +82,14 @@ class Base
         $this->sessionStateCacheKey = $this->groupId ?? $this->roomId ?? $this->userId;
         $this->messageEventType = ($this->eventType === 'message') ? $event['message']['type'] : null;
         $this->rawEvent = $event;
+    }
+
+    public function __get(string $name)
+    {
+        if ($name === 'sessionStateCacheKey') {
+            Log::error('Trying to get non-accessable variable "' . $name . '"');
+            return null;
+        }
+        return $this->$name;
     }
 }

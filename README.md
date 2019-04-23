@@ -169,11 +169,6 @@ $this->context->getUserProfile();
 * accessable attributes
 ```php
 $this->context->rawEvent;
-$this->context->replyToken;
 $this->context->eventType;
-$this->context->sourceType;
-$this->context->userId;
-$this->context->groupId;
-$this->context->roomId;
 $this->context->messageEventType;
 ```

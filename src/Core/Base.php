@@ -63,12 +63,20 @@ class Base
      */
     protected $sessionStateCacheKey;
 
+    /**
+     * available variable name
+     *
+     * @var array
+     */
+    private $whiteList;
+
     public function __construct()
     {
         $this->bot = new LINEBot(
             new CurlHTTPClient(config('linebot.channelAccessToken')),
             ['channelSecret' => config('linebot.channelSecret')]
         );
+        $this->whiteList = ['eventType', 'messageEventType', 'rawEvent'];
     }
 
     public function setContext($event)
@@ -84,12 +92,17 @@ class Base
         $this->rawEvent = $event;
     }
 
+    /**
+     * read only variables
+     *
+     * @param string $name
+     */
     public function __get(string $name)
     {
-        if ($name === 'sessionStateCacheKey') {
-            Log::error('Trying to get non-accessable variable "' . $name . '"');
-            return null;
+        if (array_key_exists($name, $this->whiteList)) {
+            return $this->name;
         }
-        return $this->$name;
+        Log::error('Trying to get non-accessable variable "' . $name . '"');
+        return null;
     }
 }

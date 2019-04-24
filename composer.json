@@ -19,5 +19,12 @@
         "psr-4": {
           "Whchi\\LaravelLineBotWrapper\\": "src/"
         }
+      },
+      "extra": {
+          "laravel":{
+              "providers":[
+                  "Whchi\\LaravelLineBotWrapper\\LINEBotServiceProvider"
+              ]
+          }
       }
 }

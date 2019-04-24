@@ -7,23 +7,19 @@ Inspired by [bottener.js](https://github.com/Yoctol/bottender)
 ```bash
 composer require whchi/laravel-linebot-wrapper
 ```
-2. add ServiceProvider in `config/php`
-```php
-Whchi\LaravelLineBotWrapper\LINEBotServiceProvider::class
-```
-3. publish vendor
+2. publish vendor
 ```bash
 php artisan vendor:publish --provider="Whchi\LaravelLineBotWrapper\LINEBotServiceProvider"
 ```
-4. setup config `config/linebot.php`
+3. setup config `config/linebot.php`
 ```php
 return [
     'channelAccessToken' => 'find it in your LINE console'
     'channelSecret' => 'find it in your LINE console'
 ];
 ```
-5. run migration: create a table named `line_bot_sessions`
-6. start use, see sample in [app sample](https://github.com/whchi/laravel-linebot-wrapper/tree/master/samples/app)
+4. run migration: create a table named `line_bot_sessions`
+5. start use, see sample in [app sample](https://github.com/whchi/laravel-linebot-wrapper/tree/master/samples/app)
 
 # Usage
 ## Initialize

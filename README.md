@@ -20,7 +20,7 @@ return [
 ```
 4. run migration: create a table named `line_bot_sessions`
 5. start use, see sample in [app sample](https://github.com/whchi/laravel-linebot-wrapper/tree/master/samples/app)
-
+> remember to remove VerifyCsrfToken for line route
 # Usage
 ## Initialize
 In your webhook entry point

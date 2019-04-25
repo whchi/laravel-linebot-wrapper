@@ -4,13 +4,12 @@ namespace Whchi\LaravelLineBotWrapper\Traits;
 
 trait Leave
 {
-    public function leaveGroup()
+    public function leave()
     {
-        $this->bot->leaveGroup($this->groupId);
-    }
-
-    public function leaveRoom()
-    {
-        $this->bot->leaveRoom($this->roomId);
+        if (isset($this->groupId)) {
+            $this->bot->leaveGroup($this->groupId);
+        } else {
+            $this->bot->leaveGroup($this->roomId);
+        }
     }
 }

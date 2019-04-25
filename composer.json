@@ -3,7 +3,7 @@
     "description": "A simple laravel wrapper for linecorp/line-bot-sdk",
     "type": "library",
     "require": {
-        "laravel/framework": "5.5.*",
+        "laravel/framework": "5.8.*",
         "linecorp/line-bot-sdk": "3.*",
         "predis/predis": "^1.1"
     },

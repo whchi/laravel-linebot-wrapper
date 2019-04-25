@@ -7,16 +7,22 @@ use Whchi\LaravelLineBotWrapper\Core\MessageBuilders\LINEMessageBuilder;
 use Whchi\LaravelLineBotWrapper\Traits\BotState;
 use Whchi\LaravelLineBotWrapper\Traits\MessagePusher;
 use Whchi\LaravelLineBotWrapper\Traits\MessageReplier;
-
+use Whchi\LaravelLineBotWrapper\Traits\UserProfile;
 class LINEBotContext extends LINEMessageBuilder
 {
-    use MessageReplier, MessagePusher, BotState;
+    use MessageReplier, MessagePusher, BotState, UserProfile;
 
     protected $pushTo;
 
-    public function setPushTo(string $memberId)
+    /**
+     * push_api, can be userId / groupId / roomId
+     *
+     * @param string $to
+     * @return void
+     */
+    public function setPushTo(string $to)
     {
-        $this->pushTo = $memberId;
+        $this->pushTo = $to;
     }
 
     public function getMessagePayload()
@@ -27,16 +33,6 @@ class LINEBotContext extends LINEMessageBuilder
     public function getPostbackPayload()
     {
         return $this->isPostBackEvent() ? $this->rawEvent['postback']['data'] : null;
-    }
-
-    public function getUserProfile()
-    {
-        $response = $this->bot->getProfile($this->userId);
-
-        if ($response->isSucceeded()) {
-            return $response->getJSONDecodedBody();
-        }
-        Log::debug($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
     }
 
     /**

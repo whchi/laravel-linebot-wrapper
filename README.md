@@ -119,10 +119,14 @@ $this->context->pushLocation(array $template)
 ```php
 $this->context->pushText(array $template)
 ```
-* #### multiple
+* #### multiple messages
 Maximum size of `$templateList` is 5, so as reply
 ```php
 $this->context->push(string $altText,array $templateList)
+```
+* #### multiple users
+```php
+$this->context->pushMulticast(array $memberIdList, string $altText, array $templateList)
 ```
 * #### flex
 Maximum size of carousel flex message is 10, more detail: [official doc](https://developers.line.biz/en/docs/messaging-api/using-flex-messages/)

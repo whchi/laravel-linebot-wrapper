@@ -87,6 +87,23 @@ trait MessagePusher
     }
 
     /**
+     * push to multiple users at a time
+     *
+     * @param array $userIdList
+     * @param string $altText
+     * @param array $template
+     * @return void
+     */
+    public function pushMulticast(array $userIdList, string $altText, array $messageList): void
+    {
+        $message = $this->buildMultiMessages($altText, $messageList);
+        $response = $this->bot->multicast($userIdList, $template);
+        if(!$response->isSucceeded()) {
+            Log::debug($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
+        }
+    }
+
+    /**
      * Flex message
      *
      * @return void

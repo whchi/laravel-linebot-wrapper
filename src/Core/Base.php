@@ -69,15 +69,28 @@ class Base
      * @var array
      */
     private $whiteList;
+    /**
+     * linecorp/line-php-sdk http client
+     *
+     * @var CurlHTTPClient
+     */
+    protected $httpClient;
 
     public function __construct()
     {
+        $this->httpClient = new CurlHTTPClient(config('linebot.channelAccessToken'));
         $this->bot = new LINEBot(
-            new CurlHTTPClient(config('linebot.channelAccessToken')),
+            $this->httpClient,
             ['channelSecret' => config('linebot.channelSecret')]
         );
+        \Log::info(config('linebot.channelAccessToken'));
         $this->whiteList = ['eventType', 'messageEventType', 'rawEvent'];
     }
+
+    // public function __call($name, $arguments)
+    // {
+    //     return call_user_func_array([ & $this->bot, $name], $arguments);
+    // }
 
     public function setContext($event)
     {

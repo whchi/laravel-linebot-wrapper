@@ -140,6 +140,15 @@ $this->context->pushButtonTemplate(string $altText, $template + $quickReply);
 ```
 ### reply API
 Change `pushXXXX` to `replyXXXX` without setting userId, that is.
+### Leave API
+* leave group
+```php
+$this->context->leaveGroup();
+```
+* leave room
+```php
+$this->context->leaveRoom();
+```
 ### other usage
 * detect event\
 more detail see [official doc](https://developers.line.biz/en/reference/messaging-api/#message-event)

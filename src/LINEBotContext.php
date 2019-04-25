@@ -2,15 +2,16 @@
 
 namespace Whchi\LaravelLineBotWrapper;
 
-use Log;
 use Whchi\LaravelLineBotWrapper\Core\MessageBuilders\LINEMessageBuilder;
 use Whchi\LaravelLineBotWrapper\Traits\BotState;
 use Whchi\LaravelLineBotWrapper\Traits\MessagePusher;
 use Whchi\LaravelLineBotWrapper\Traits\MessageReplier;
 use Whchi\LaravelLineBotWrapper\Traits\UserProfile;
+use Whchi\LaravelLineBotWrapper\Traits\Leave;
+
 class LINEBotContext extends LINEMessageBuilder
 {
-    use MessageReplier, MessagePusher, BotState, UserProfile;
+    use MessageReplier, MessagePusher, BotState, UserProfile, Leave;
 
     protected $pushTo;
 

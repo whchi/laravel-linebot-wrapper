@@ -86,11 +86,6 @@ class Base
         $this->whiteList = ['eventType', 'messageEventType', 'rawEvent'];
     }
 
-    // public function __call($name, $arguments)
-    // {
-    //     return call_user_func_array([ & $this->bot, $name], $arguments);
-    // }
-
     public function setContext($event)
     {
         $this->replyToken = $event['replyToken'];

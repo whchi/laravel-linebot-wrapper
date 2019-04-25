@@ -83,7 +83,6 @@ class Base
             $this->httpClient,
             ['channelSecret' => config('linebot.channelSecret')]
         );
-        \Log::info(config('linebot.channelAccessToken'));
         $this->whiteList = ['eventType', 'messageEventType', 'rawEvent'];
     }
 

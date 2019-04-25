@@ -5,13 +5,34 @@ namespace Whchi\LaravelLineBotWrapper\Core\MessageBuilders\Helpers;
 use LINE\LINEBot\ImagemapActionBuilder\AreaBuilder;
 use LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder;
 use LINE\LINEBot\ImagemapActionBuilder\ImagemapUriActionBuilder;
+use LINE\LINEBot\QuickReplyBuilder\ButtonBuilder\QuickReplyButtonBuilder;
+use LINE\LINEBot\QuickReplyBuilder\QuickReplyMessageBuilder;
 use LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
 use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
 
-class LINETemplateActionBuilder
+class LINETemplateBuilderHelper
 {
+    const QUICK_REPLY_LIMIT = 13;
+
+    public static function buildQuickReply(array $template)
+    {
+        $quickReply = null;
+
+        if (isset($template['quickReply']) && count($template['quickReply']) < self::QUICK_REPLY_LIMIT) {
+            $quickReplyButtons = $template['quickReply']['items']->map(function ($ele) {
+                if ($ele['type'] !== 'action') {
+                    return null;
+                }
+                $action = self::getAction($ele['action']);
+                return new QuickReplyButtonBuilder($action, $ele['imageUrl']);
+            })->toArray();
+            $quickReply = new QuickReplyMessageBuilder($quickReplyButtons);
+        }
+
+        return $quickReply;
+    }
 
     public static function getAction(array $action)
     {

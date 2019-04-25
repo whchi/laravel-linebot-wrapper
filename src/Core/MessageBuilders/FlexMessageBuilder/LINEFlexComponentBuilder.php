@@ -15,7 +15,7 @@ use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ImageComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SeparatorComponentBuilder as SeparatorLayout;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SpacerComponentBuilder as SpacerLayout;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
-use Whchi\LaravelLineBotWrapper\Core\MessageBuilders\Helpers\LINETemplateActionBuilder;
+use Whchi\LaravelLineBotWrapper\Core\MessageBuilders\Helpers\LINETemplateBuilderHelper;
 use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
 
 class LINEFlexComponentBuilder
@@ -118,7 +118,7 @@ class LINEFlexComponentBuilder
                 throw new MessageBuilderException('Invalid TextComponent type: ' . $idx);
             }
             if ($idx === 'action') {
-                $action = LINETemplateActionBuilder::getAction($ele);
+                $action = LINETemplateBuilderHelper::getAction($ele);
                 $builder->setAction($action);
             } else {
                 call_user_func([$builder, 'set' . ucfirst($idx)], $ele);
@@ -145,7 +145,7 @@ class LINEFlexComponentBuilder
                 throw new MessageBuilderException('Invalid ImageComponent type: ' . $idx);
             }
             if ($idx === 'action') {
-                $action = LINETemplateActionBuilder::getAction($ele);
+                $action = LINETemplateBuilderHelper::getAction($ele);
                 $builder->setAction($action);
             } else {
                 call_user_func([$builder, 'set' . ucfirst($idx)], $ele);
@@ -166,7 +166,7 @@ class LINEFlexComponentBuilder
     private static function setButton(array $template): ButtonComponentBuilder
     {
         $builder = ButtonComponentBuilder::builder();
-        $action = LINETemplateActionBuilder::getAction($template['action']);
+        $action = LINETemplateBuilderHelper::getAction($template['action']);
         unset($template['action']);
         $builder->setAction($action);
 
@@ -225,7 +225,7 @@ class LINEFlexComponentBuilder
                 throw new MessageBuilderException('Invalid BoxLayout type: ' . $idx);
             }
             if ($idx === 'action') {
-                $action = LINETemplateActionBuilder::getAction($ele);
+                $action = LINETemplateBuilderHelper::getAction($ele);
                 $builder->setAction($action);
             } else {
                 call_user_func([$builder, 'set' . ucfirst($idx)], $ele);

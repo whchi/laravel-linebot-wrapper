@@ -65,9 +65,7 @@ class LINEFlexMessageBuilder
     private function setBubbleTemplate(array $template): BubbleContainerBuilder
     {
         // avoid invalid key error
-        if (isset($template['type'])) {
-            unset($template['type']);
-        }
+        unset($template['type'], $template['quickReply']);
 
         $this->bubbleContainer = BubbleContainerBuilder::builder();
         foreach ($template as $idx => $ele) {

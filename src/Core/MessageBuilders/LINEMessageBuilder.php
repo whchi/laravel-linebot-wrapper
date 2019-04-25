@@ -22,7 +22,7 @@ use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\MessageBuilder\VideoMessageBuilder;
 use Whchi\LaravelLineBotWrapper\Core\Base;
 use Whchi\LaravelLineBotWrapper\Core\MessageBuilders\FlexMessageBuilder\LINEFlexMessageBuilder;
-use Whchi\LaravelLineBotWrapper\Core\MessageBuilders\Helpers\LINETemplateActionBuilder;
+use Whchi\LaravelLineBotWrapper\Core\MessageBuilders\Helpers\LINETemplateBuilderHelper;
 use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
 
 class LINEMessageBuilder extends Base
@@ -36,8 +36,10 @@ class LINEMessageBuilder extends Base
     protected function buildButtonTemplateMessage(string $altText, array $template): TemplateMessageBuilder
     {
         $actions = $template['actions']->map(function ($action) {
-            return LINETemplateActionBuilder::getAction($action);
+            return LINETemplateBuilderHelper::getAction($action);
         })->toArray();
+
+        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
 
         $buttons = new ButtonTemplateBuilder(
             $template['title'],
@@ -45,7 +47,7 @@ class LINEMessageBuilder extends Base
             $template['thumbnailImageUrl'],
             $actions
         );
-        $message = new TemplateMessageBuilder($altText, $buttons);
+        $message = new TemplateMessageBuilder($altText, $buttons, $quickReply);
         return $message;
     }
 
@@ -58,14 +60,16 @@ class LINEMessageBuilder extends Base
     protected function buildConfirmTemplateMessage(string $altText, array $template): TemplateMessageBuilder
     {
         $actions = $template['actions']->map(function ($action) {
-            return LINETemplateActionBuilder::getAction($action);
+            return LINETemplateBuilderHelper::getAction($action);
         })->toArray();
+
+        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
 
         $buttons = new ConfirmTemplateBuilder(
             $template['text'],
             $actions
         );
-        $message = new TemplateMessageBuilder($altText, $buttons);
+        $message = new TemplateMessageBuilder($altText, $buttons, $quickReply);
 
         return $message;
     }
@@ -83,14 +87,16 @@ class LINEMessageBuilder extends Base
             $text = $ele['text'];
             $image = $ele['thumbnailImageUrl'];
             $actions = $ele['actions']->map(function ($action) {
-                return LINETemplateActionBuilder::getAction($action);
+                return LINETemplateBuilderHelper::getAction($action);
             })->toArray();
 
             return new CarouselColumnTemplateBuilder($title, $text, $image, $actions);
         })->toArray();
 
+        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+
         $carousel = new CarouselTemplateBuilder($columns);
-        $message = new TemplateMessageBuilder($altText, $carousel);
+        $message = new TemplateMessageBuilder($altText, $carousel, $quickReply);
 
         return $message;
     }
@@ -100,12 +106,14 @@ class LINEMessageBuilder extends Base
         $columns = $template['columns']->map(function ($ele) {
             $imageUri = $ele['imageUrl'];
 
-            $action = LINETemplateActionBuilder::getAction($ele['action']);
+            $action = LINETemplateBuilderHelper::getAction($ele['action']);
             return new ImageCarouselColumnTemplateBuilder($imageUri, $action);
         })->toArray();
 
+        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+
         $imageCarousel = new ImageCarouselTemplateBuilder($columns);
-        $message = new TemplateMessageBuilder($altText, $imageCarousel);
+        $message = new TemplateMessageBuilder($altText, $imageCarousel, $quickReply);
 
         return $message;
     }
@@ -120,14 +128,17 @@ class LINEMessageBuilder extends Base
 
         $imageMapActions = $template['actions']->map(function ($action) {
             $area = new AreaBuilder($action['area']['x'], $action['area']['y'], $action['area']['width'], $action['area']['height']);
-            return LINETemplateActionBuilder::getImageMapAction($action, $area);
+            return LINETemplateBuilderHelper::getImageMapAction($action, $area);
         })->toArray();
+
+        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
 
         $message = new ImagemapMessageBuilder(
             $baseUrl,
             $altText,
             $baseSize,
-            $imageMapActions
+            $imageMapActions,
+            $quickReply
         );
 
         return $message;
@@ -135,37 +146,44 @@ class LINEMessageBuilder extends Base
 
     protected function buildAudioMessage(array $template): AudioMessageBuilder
     {
-        return new AudioMessageBuilder($template['originalContentUrl'], $template['duration']);
+        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        return new AudioMessageBuilder($template['originalContentUrl'], $template['duration'], $quickReply);
     }
 
     protected function buildVideoMessage(array $template): VideoMessageBuilder
     {
-        return new VideoMessageBuilder($template['originalContentUrl'], $template['previewImageUrl']);
+        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        return new VideoMessageBuilder($template['originalContentUrl'], $template['previewImageUrl'], $quickReply);
     }
 
     protected function buildImageMessage(array $template): ImageMessageBuilder
     {
-        return new ImageMessageBuilder($template['originalContentUrl'], $template['previewImageUrl']);
+        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        return new ImageMessageBuilder($template['originalContentUrl'], $template['previewImageUrl'], $quickReply);
     }
 
     protected function buildStickerMessage(array $template): StickerMessageBuilder
     {
-        return new StickerMessageBuilder($template['packageId'], $template['stickerId']);
+        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        return new StickerMessageBuilder($template['packageId'], $template['stickerId'], $quickReply);
     }
 
     protected function buildLocationMessage(array $template): LocationMessageBuilder
     {
+        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
         return new LocationMessageBuilder(
             $template['title'],
             $template['address'],
             $template['lat'],
-            $template['lon']
+            $template['lon'],
+            $quickReply
         );
     }
 
     protected function buildTextMessage(array $template): TextMessageBuilder
     {
-        return new TextMessageBuilder($template['text']);
+        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        return new TextMessageBuilder($template['text'], $quickReply);
     }
 
     protected function buildMultiMessages(string $altText, array $messageList): MultiMessageBuilder
@@ -223,7 +241,10 @@ class LINEMessageBuilder extends Base
         $flex = new LINEFlexMessageBuilder($template['type']);
         $flex->createComponents($template);
         $container = $flex->getContainer();
-        $builder = new FlexMessageBuilder($altText, $container);
+
+        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+
+        $builder = new FlexMessageBuilder($altText, $container, $quickReply);
         return $builder;
     }
 }

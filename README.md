@@ -129,6 +129,11 @@ Maximum size of carousel flex message is 10, more detail: [official doc](https:/
 ```php
 $this->context->pushFlex(string $altText, array $flexTemplate)
 ```
+* quickReply
+see $quickReply example at [message samples](https://github.com/whchi/laravel-linebot-wrapper/tree/master/samples/message)
+```php
+$this->context->pushButtonTemplate(string $altText, $template + $quickReply);
+```
 ### reply API
 Change `pushXXXX` to `replyXXXX` without setting userId, that is.
 ### other usage

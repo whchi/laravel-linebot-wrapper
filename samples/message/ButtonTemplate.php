@@ -1,9 +1,15 @@
 <?php
-
 $template = [
     'title' => 'title',
     'text' => 'text',
     'thumbnailImageUrl' => 'https://i.imgur.com/cVFzY9F.png',
+    'defaultAction' => [
+        'type' => 'uri',
+        'label' => 'cw official',
+        'uri' => 'http://cw.com.tw',
+    ],
+    'imageAspectRatio' => 'rectangle',
+    'imageSize' => 'cover',
     'actions' => collect([
         [
             'type' => 'uri',

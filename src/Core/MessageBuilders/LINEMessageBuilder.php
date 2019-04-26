@@ -2,11 +2,9 @@
 
 namespace Whchi\LaravelLineBotWrapper\Core\MessageBuilders;
 
-use LINE\LINEBot\ImagemapActionBuilder\AreaBuilder;
 use LINE\LINEBot\MessageBuilder\AudioMessageBuilder;
 use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 use LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder;
-use LINE\LINEBot\MessageBuilder\Imagemap\BaseSizeBuilder;
 use LINE\LINEBot\MessageBuilder\ImageMessageBuilder;
 use LINE\LINEBot\MessageBuilder\LocationMessageBuilder;
 use LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
@@ -27,6 +25,7 @@ use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
 
 class LINEMessageBuilder extends Base
 {
+
     /**
      * build button template
      *
@@ -38,6 +37,15 @@ class LINEMessageBuilder extends Base
         $actions = $template['actions']->map(function ($action) {
             return LINETemplateBuilderHelper::getAction($action);
         })->toArray();
+        // optional
+        $template['title'] = $template['title'] ?? null;
+        $template['thumbnailImageUrl'] = $template['thumbnailImageUrl'] ?? null;
+        $template['imageAspectRatio'] = $template['imageAspectRatio'] ?? null;
+        $template['imageSize'] = $template['imageSize'] ?? null;
+        $template['imageBackgroundColor'] = $template['imageBackgroundColor'] ?? null;
+        $defaultAction = (isset($template['defaultAction']))
+        ? LINETemplateBuilderHelper::getAction($template['defaultAction'])
+        : null;
 
         $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
 
@@ -45,7 +53,11 @@ class LINEMessageBuilder extends Base
             $template['title'],
             $template['text'],
             $template['thumbnailImageUrl'],
-            $actions
+            $actions,
+            $template['imageAspectRatio'],
+            $template['imageSize'],
+            $template['imageBackgroundColor'],
+            $defaultAction
         );
         $message = new TemplateMessageBuilder($altText, $buttons, $quickReply);
         return $message;
@@ -90,12 +102,21 @@ class LINEMessageBuilder extends Base
                 return LINETemplateBuilderHelper::getAction($action);
             })->toArray();
 
-            return new CarouselColumnTemplateBuilder($title, $text, $image, $actions);
+            // optional
+            $imageBackgroundColor = $ele['imageBackgroundColor'] ?? null;
+
+            return new CarouselColumnTemplateBuilder($title, $text, $image, $actions, $imageBackgroundColor);
         })->toArray();
+        // optional
+        $template['imageAspectRatio'] = $template['imageAspectRatio'] ?? null;
+        $template['imageSize'] = $template['imageSize'] ?? null;
 
         $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
 
-        $carousel = new CarouselTemplateBuilder($columns);
+        \Log::info('quickReply');
+        \Log::info(var_export($template, 1));
+
+        $carousel = new CarouselTemplateBuilder($columns, $template['imageAspectRatio'], $template['imageSize']);
         $message = new TemplateMessageBuilder($altText, $carousel, $quickReply);
 
         return $message;
@@ -105,8 +126,8 @@ class LINEMessageBuilder extends Base
     {
         $columns = $template['columns']->map(function ($ele) {
             $imageUri = $ele['imageUrl'];
+            $action = LINETemplateBuilderHelper::getAction($ele['action'], true);
 
-            $action = LINETemplateBuilderHelper::getAction($ele['action']);
             return new ImageCarouselColumnTemplateBuilder($imageUri, $action);
         })->toArray();
 
@@ -121,14 +142,14 @@ class LINEMessageBuilder extends Base
     protected function buildImageMapMessage(string $altText, array $template): ImagemapMessageBuilder
     {
         $baseUrl = $template['baseUrl'];
-        $baseSize = new BaseSizeBuilder(
-            $template['baseSize']['width'],
-            $template['baseSize']['height']
-        );
+        $baseSize = LINETemplateBuilderHelper::getImageMapBaseSize($template['baseSize']);
+
+        $videoBuilder = (isset($template['video']))
+        ? LINETemplateBuilderHelper::getImageMapVideoBuilder($template['video'])
+        : null;
 
         $imageMapActions = $template['actions']->map(function ($action) {
-            $area = new AreaBuilder($action['area']['x'], $action['area']['y'], $action['area']['width'], $action['area']['height']);
-            return LINETemplateBuilderHelper::getImageMapAction($action, $area);
+            return LINETemplateBuilderHelper::getImageMapAction($action);
         })->toArray();
 
         $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
@@ -138,7 +159,8 @@ class LINEMessageBuilder extends Base
             $altText,
             $baseSize,
             $imageMapActions,
-            $quickReply
+            $quickReply,
+            $videoBuilder
         );
 
         return $message;
@@ -183,6 +205,7 @@ class LINEMessageBuilder extends Base
     protected function buildTextMessage(array $template): TextMessageBuilder
     {
         $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+
         return new TextMessageBuilder($template['text'], $quickReply);
     }
 

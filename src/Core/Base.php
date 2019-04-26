@@ -91,9 +91,12 @@ class Base
         $this->replyToken = $event['replyToken'];
         $this->eventType = $event['type'];
         $this->sourceType = $event['source']['type'];
-        $this->userId = $event['source']['userId'] ?? null;
-        $this->groupId = $event['source']['groupId'] ?? null;
-        $this->roomId = $event['source']['userId'] ?? null;
+        $this->userId = ($event['source']['type'] === 'user')
+        ? $event['source']['userId'] : null;
+        $this->groupId = ($event['source']['type'] === 'group')
+        ? $event['source']['groupId'] : null;
+        $this->roomId = ($event['source']['type'] === 'room')
+        ? $event['source']['roomId'] : null;
         $this->sessionStateCacheKey = $this->groupId ?? $this->roomId ?? $this->userId;
         $this->messageEventType = ($this->eventType === 'message') ? $event['message']['type'] : null;
         $this->rawEvent = $event;

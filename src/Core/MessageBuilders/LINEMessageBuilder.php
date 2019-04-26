@@ -113,9 +113,6 @@ class LINEMessageBuilder extends Base
 
         $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
 
-        \Log::info('quickReply');
-        \Log::info(var_export($template, 1));
-
         $carousel = new CarouselTemplateBuilder($columns, $template['imageAspectRatio'], $template['imageSize']);
         $message = new TemplateMessageBuilder($altText, $carousel, $quickReply);
 

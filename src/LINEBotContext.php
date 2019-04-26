@@ -2,12 +2,13 @@
 
 namespace Whchi\LaravelLineBotWrapper;
 
+use Log;
 use Whchi\LaravelLineBotWrapper\Core\MessageBuilders\LINEMessageBuilder;
 use Whchi\LaravelLineBotWrapper\Traits\BotState;
+use Whchi\LaravelLineBotWrapper\Traits\Leave;
 use Whchi\LaravelLineBotWrapper\Traits\MessagePusher;
 use Whchi\LaravelLineBotWrapper\Traits\MessageReplier;
 use Whchi\LaravelLineBotWrapper\Traits\UserProfile;
-use Whchi\LaravelLineBotWrapper\Traits\Leave;
 
 class LINEBotContext extends LINEMessageBuilder
 {
@@ -36,6 +37,24 @@ class LINEBotContext extends LINEMessageBuilder
         return $this->isPostBackEvent() ? $this->rawEvent['postback']['data'] : null;
     }
 
+    /**
+     * Works on audio / video / image messages
+     */
+    public function getMessageStreamData()
+    {
+        if (!in_array($this->messageEventType, ['audio', 'video', 'image'])) {
+            Log::error('Calling ' . __FUNCTION__ . ' error, Invalid messageEventType');
+            return null;
+        }
+
+        $id = $this->getMessagePayload()['id'];
+        $response = $this->bot->getMessageContent($id);
+
+        if ($response->isSucceeded()) {
+            return $response->getRawBody();
+        }
+        Log::debug($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
+    }
     /**
      * event checkers
      */

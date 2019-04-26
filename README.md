@@ -175,6 +175,10 @@ more detail see [official doc](https://developers.line.biz/en/reference/messagin
 ```php
 $this->context->getUserProfile();
 ```
+* get streaming data(audio / video / image)
+```php
+$this->context->getMessageStreamData();
+```
 * accessable attributes
 ```php
 $this->context->rawEvent;

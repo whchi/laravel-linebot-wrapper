@@ -2,6 +2,7 @@
 
 namespace Whchi\LaravelLineBotWrapper\Traits;
 
+use Log;
 trait UserProfile
 {
     public function getUserProfile()
@@ -12,7 +13,5 @@ trait UserProfile
             return $response->getJSONDecodedBody();
         }
         Log::debug($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
-
-        return $this->bot->getProfile($userId);
     }
 }

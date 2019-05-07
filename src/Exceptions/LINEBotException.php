@@ -2,10 +2,14 @@
 
 namespace Whchi\LaravelLineBotWrapper\Exceptions;
 
-class LINEBotException extends \Exception
+use Exception;
+
+class LINEBotException extends Exception
 {
+    const ERROR_CODE = 9;
+
     public function __construct(string $message)
     {
-        parent::__construct($message);
+        parent::__construct(get_called_class() . ', ' . $message, static::ERROR_CODE);
     }
 }

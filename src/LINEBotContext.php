@@ -2,8 +2,8 @@
 
 namespace Whchi\LaravelLineBotWrapper;
 
-use Log;
 use Whchi\LaravelLineBotWrapper\Core\MessageBuilders\LINEMessageBuilder;
+use Whchi\LaravelLineBotWrapper\Exceptions\ContextException;
 use Whchi\LaravelLineBotWrapper\Traits\BotState;
 use Whchi\LaravelLineBotWrapper\Traits\Leave;
 use Whchi\LaravelLineBotWrapper\Traits\MessagePusher;
@@ -43,8 +43,7 @@ class LINEBotContext extends LINEMessageBuilder
     public function getMessageStreamData()
     {
         if (!in_array($this->messageEventType, ['audio', 'video', 'image'])) {
-            Log::error('Calling ' . __FUNCTION__ . ' error, Invalid messageEventType');
-            return null;
+            throw new ContextException('Calling ' . __FUNCTION__ . ' error, Invalid messageEventType');
         }
 
         $id = $this->getMessagePayload()['id'];
@@ -53,7 +52,7 @@ class LINEBotContext extends LINEMessageBuilder
         if ($response->isSucceeded()) {
             return $response->getRawBody();
         }
-        Log::debug($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
+        throw new ContextException($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
     }
     /**
      * event checkers

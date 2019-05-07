@@ -3,8 +3,7 @@
 namespace Whchi\LaravelLineBotWrapper\Traits;
 
 use LINE\LINEBot\MessageBuilder;
-use Log;
-
+use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
 trait MessagePusher
 {
     public function pushButtonTemplate(string $altText, array $template): void
@@ -98,8 +97,8 @@ trait MessagePusher
     {
         $message = $this->buildMultiMessages($altText, $messageList);
         $response = $this->bot->multicast($userIdList, $template);
-        if(!$response->isSucceeded()) {
-            Log::debug($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
+        if (!$response->isSucceeded()) {
+            throw new MessageBuilderException($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
         }
     }
 
@@ -118,7 +117,7 @@ trait MessagePusher
     {
         $response = $this->bot->pushMessage($this->pushTo, $message);
         if (!$response->isSucceeded()) {
-            Log::debug($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
+            throw new MessageBuilderException($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
         }
     }
 }

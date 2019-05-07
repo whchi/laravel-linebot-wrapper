@@ -4,7 +4,7 @@ namespace Whchi\LaravelLineBotWrapper\Core;
 
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
-use Log;
+use Whchi\LaravelLineBotWrapper\Exceptions\BotStateException;
 
 class Base
 {
@@ -112,7 +112,6 @@ class Base
         if (array_key_exists($name, $this->whiteList)) {
             return $this->name;
         }
-        Log::error('Trying to get non-accessable variable "' . $name . '"');
-        return null;
+        throw new BotStateException('Trying to get non-accessable variable "' . $name . '"');
     }
 }

@@ -3,7 +3,7 @@
 namespace Whchi\LaravelLineBotWrapper\Traits;
 
 use LINE\LINEBot\MessageBuilder;
-use Log;
+use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
 
 trait MessageReplier
 {
@@ -101,7 +101,7 @@ trait MessageReplier
     {
         $response = $this->bot->replyMessage($this->replyToken, $message);
         if (!$response->isSucceeded()) {
-            Log::debug($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
+            throw new MessageBuilderException($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
         }
     }
 }

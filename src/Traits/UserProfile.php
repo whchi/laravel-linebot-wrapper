@@ -2,7 +2,7 @@
 
 namespace Whchi\LaravelLineBotWrapper\Traits;
 
-use Log;
+use Whchi\LaravelLineBotWrapper\Exceptions\ContextException;
 trait UserProfile
 {
     public function getUserProfile()
@@ -12,6 +12,6 @@ trait UserProfile
         if ($response->isSucceeded()) {
             return $response->getJSONDecodedBody();
         }
-        Log::debug($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
+        throw new ContextException($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
     }
 }

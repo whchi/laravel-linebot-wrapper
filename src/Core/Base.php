@@ -109,7 +109,7 @@ class Base
     public function __get(string $name)
     {
         if (in_array($name, $this->_whiteList)) {
-            return $name;
+            return $this->{$name};
         }
         throw new BotStateException('Trying to get non-accessable variable "' . $name . '"');
     }

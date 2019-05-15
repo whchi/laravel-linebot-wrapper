@@ -21,7 +21,7 @@ class LineBotSessionRepository
             default:
                 LineBotSession::create([
                     'user_id' => $data['source']['userId'],
-                    'type' => $data['source']['type'],
+                    'session_type' => $data['source']['type'],
                     'last_activity' => time(),
                 ]);
                 break;

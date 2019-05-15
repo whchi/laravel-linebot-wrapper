@@ -10,7 +10,7 @@ class LineBotSession extends Model
         'user_id',
         'group_id',
         'room_id',
-        'type',
+        'session_type',
         'last_activity',
     ];
 }

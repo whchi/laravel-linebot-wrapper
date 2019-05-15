@@ -18,7 +18,7 @@ class CreateLineBotSessionsTable extends Migration
             $table->string('user_id', 40)->nullable()->unique();
             $table->string('group_id', 40)->nullable()->unique();
             $table->string('room_id', 40)->nullable()->unique();
-            $table->string('type', 10);
+            $table->string('session_type', 10);
             $table->integer('last_activity');
             $table->timestamps();
         });

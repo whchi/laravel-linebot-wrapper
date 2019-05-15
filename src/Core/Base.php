@@ -91,8 +91,7 @@ class Base
         $this->replyToken = $event['replyToken'];
         $this->eventType = $event['type'];
         $this->sourceType = $event['source']['type'];
-        $this->userId = ($event['source']['type'] === 'user')
-        ? $event['source']['userId'] : null;
+        $this->userId = $event['source']['userId'];
         $this->groupId = ($event['source']['type'] === 'group')
         ? $event['source']['groupId'] : null;
         $this->roomId = ($event['source']['type'] === 'room')

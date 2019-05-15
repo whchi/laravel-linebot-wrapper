@@ -64,17 +64,17 @@ class Base
     protected $sessionStateCacheKey;
 
     /**
-     * available variable name
-     *
-     * @var array
-     */
-    private $whiteList;
-    /**
      * linecorp/line-php-sdk http client
      *
      * @var CurlHTTPClient
      */
     protected $httpClient;
+    /**
+     * available variable name
+     *
+     * @var array
+     */
+    private $_whiteList;
 
     public function __construct()
     {
@@ -83,7 +83,7 @@ class Base
             $this->httpClient,
             ['channelSecret' => config('linebot.channelSecret')]
         );
-        $this->whiteList = ['eventType', 'messageEventType', 'rawEvent', 'userId'];
+        $this->_whiteList = ['eventType', 'messageEventType', 'rawEvent', 'userId'];
     }
 
     public function setContext($event)
@@ -108,8 +108,8 @@ class Base
      */
     public function __get(string $name)
     {
-        if (array_key_exists($name, $this->whiteList)) {
-            return $this->name;
+        if (in_array($name, $this->_whiteList)) {
+            return $name;
         }
         throw new BotStateException('Trying to get non-accessable variable "' . $name . '"');
     }

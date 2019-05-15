@@ -14,7 +14,7 @@ class CreateLineBotSessionsTable extends Migration
     public function up()
     {
         Schema::create('line_bot_sessions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('user_id', 40)->nullable()->unique();
             $table->string('group_id', 40)->nullable()->unique();
             $table->string('room_id', 40)->nullable()->unique();

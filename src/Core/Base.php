@@ -83,7 +83,7 @@ class Base
             $this->httpClient,
             ['channelSecret' => config('linebot.channelSecret')]
         );
-        $this->whiteList = ['eventType', 'messageEventType', 'rawEvent'];
+        $this->whiteList = ['eventType', 'messageEventType', 'rawEvent', 'userId'];
     }
 
     public function setContext($event)

@@ -3,8 +3,8 @@
 namespace Whchi\LaravelLineBotWrapper\Traits;
 
 use Cache;
-use Whchi\LaravelLineBotWrapper\Exceptions\BotStateException;
 use Illuminate\Support\Arr;
+use Whchi\LaravelLineBotWrapper\Exceptions\BotStateException;
 trait BotState
 {
     /**
@@ -12,16 +12,18 @@ trait BotState
      *
      * @var string json
      */
-    private $initState;
+    private $_initState;
 
     public function initState(array $state): void
     {
-        $this->initState = Arr::dot($state);
+        $this->_initState = Arr::dot($state);
     }
 
     public function buildState()
     {
-        Cache::forever($this->sessionStateCacheKey, $this->initState);
+        if (!Cache::has($this->sessionStateCacheKey)) {
+            Cache::forever($this->sessionStateCacheKey, $this->_initState);
+        }
     }
 
     public function setState(array $state): void
@@ -56,6 +58,6 @@ trait BotState
     public function resetState()
     {
         Cache::forget($this->sessionStateCacheKey);
-        Cache::forever($this->sessionStateCacheKey, $this->initState);
+        Cache::forever($this->sessionStateCacheKey, $this->_initState);
     }
 }

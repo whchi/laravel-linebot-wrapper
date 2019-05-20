@@ -74,7 +74,7 @@ class Base
      *
      * @var array
      */
-    private $_whiteList;
+    private $whiteList;
 
     public function __construct()
     {
@@ -83,7 +83,7 @@ class Base
             $this->httpClient,
             ['channelSecret' => config('linebot.channelSecret')]
         );
-        $this->_whiteList = ['eventType', 'messageEventType', 'rawEvent', 'userId'];
+        $this->whiteList = ['eventType', 'messageEventType', 'rawEvent', 'userId'];
     }
 
     public function setContext($event)
@@ -108,7 +108,7 @@ class Base
      */
     public function __get(string $name)
     {
-        if (in_array($name, $this->_whiteList)) {
+        if (in_array($name, $this->whiteList)) {
             return $this->{$name};
         }
         throw new BotStateException('Trying to get non-accessable variable "' . $name . '"');

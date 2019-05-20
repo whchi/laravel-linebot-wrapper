@@ -12,17 +12,17 @@ trait BotState
      *
      * @var string json
      */
-    private $_initState;
+    private $initState;
 
     public function initState(array $state): void
     {
-        $this->_initState = Arr::dot($state);
+        $this->initState = Arr::dot($state);
     }
 
     public function buildState()
     {
         if (!Cache::has($this->sessionStateCacheKey)) {
-            Cache::forever($this->sessionStateCacheKey, $this->_initState);
+            Cache::forever($this->sessionStateCacheKey, $this->initState);
         }
     }
 
@@ -58,6 +58,6 @@ trait BotState
     public function resetState()
     {
         Cache::forget($this->sessionStateCacheKey);
-        Cache::forever($this->sessionStateCacheKey, $this->_initState);
+        Cache::forever($this->sessionStateCacheKey, $this->initState);
     }
 }

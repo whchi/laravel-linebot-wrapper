@@ -21,14 +21,14 @@ trait BotState
 
     public function buildState()
     {
-        if (!Cache::has($this->sessionStateCacheKey)) {
-            Cache::forever($this->sessionStateCacheKey, $this->initState);
+        if (!Cache::has($this->botSessionId)) {
+            Cache::forever($this->botSessionId, $this->initState);
         }
     }
 
     public function setState(array $state): void
     {
-        $data = Cache::pull($this->sessionStateCacheKey);
+        $data = Cache::pull($this->botSessionId);
 
         $state = Arr::dot($state);
         array_walk($data, function (&$ele, $idx) use ($state) {
@@ -37,7 +37,7 @@ trait BotState
             }
         });
 
-        Cache::forever($this->sessionStateCacheKey, $data);
+        Cache::forever($this->botSessionId, $data);
     }
 
     /**
@@ -48,7 +48,7 @@ trait BotState
      */
     public function getState(string $key)
     {
-        $data = Cache::get($this->sessionStateCacheKey);
+        $data = Cache::get($this->botSessionId);
         if (array_key_exists($key, $data)) {
             return $data[$key];
         }
@@ -57,7 +57,7 @@ trait BotState
 
     public function resetState()
     {
-        Cache::forget($this->sessionStateCacheKey);
-        Cache::forever($this->sessionStateCacheKey, $this->initState);
+        Cache::forget($this->botSessionId);
+        Cache::forever($this->botSessionId, $this->initState);
     }
 }

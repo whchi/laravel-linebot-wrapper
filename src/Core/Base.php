@@ -56,12 +56,13 @@ class Base
      * @var array
      */
     protected $rawEvent;
+
     /**
-     * session state key
+     * session id
      *
      * @var string
      */
-    protected $sessionStateCacheKey;
+    protected $botSessionId;
 
     /**
      * linecorp/line-php-sdk http client
@@ -83,7 +84,7 @@ class Base
             $this->httpClient,
             ['channelSecret' => config('linebot.channelSecret')]
         );
-        $this->whiteList = ['eventType', 'messageEventType', 'rawEvent', 'userId'];
+        $this->whiteList = ['eventType', 'messageEventType', 'rawEvent', 'userId', 'botSessionId'];
     }
 
     public function setContext($event)
@@ -96,7 +97,7 @@ class Base
         ? $event['source']['groupId'] : null;
         $this->roomId = ($event['source']['type'] === 'room')
         ? $event['source']['roomId'] : null;
-        $this->sessionStateCacheKey = $this->groupId ?? $this->roomId ?? $this->userId;
+        $this->botSessionId = $this->groupId ?? $this->roomId ?? $this->userId;
         $this->messageEventType = ($this->eventType === 'message') ? $event['message']['type'] : null;
         $this->rawEvent = $event;
     }

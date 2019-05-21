@@ -184,4 +184,6 @@ $this->context->getMessageStreamData();
 $this->context->rawEvent;
 $this->context->eventType;
 $this->context->messageEventType;
+$this->context->useId;
+$this->context->botSessionId;
 ```

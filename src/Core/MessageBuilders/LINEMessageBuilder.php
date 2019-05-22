@@ -249,6 +249,9 @@ class LINEMessageBuilder extends Base
                 case 'location':
                     $builder->add($this->buildLocationMessage($message));
                     break;
+                case 'flex':
+                    $builder->add($this->buildFlexMessage($altText, $message['contents']));
+                    break;
                 default:
                     throw new MessageBuilderException('Invalid message type');
             }

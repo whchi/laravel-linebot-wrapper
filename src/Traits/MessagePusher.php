@@ -79,9 +79,9 @@ trait MessagePusher
      * @param array $messages
      * @return void
      */
-    public function push(string $altText, array $messageList): void
+    public function push(string $altText, array $templateList): void
     {
-        $message = $this->buildMultiMessages($altText, $messageList);
+        $message = $this->buildMultiMessages($altText, $templateList);
         $this->pushMessage($message);
     }
 
@@ -93,10 +93,10 @@ trait MessagePusher
      * @param array $template
      * @return void
      */
-    public function pushMulticast(array $userIdList, string $altText, array $messageList): void
+    public function pushMulticast(array $userIdList, string $altText, array $templateList): void
     {
-        $message = $this->buildMultiMessages($altText, $messageList);
-        $response = $this->bot->multicast($userIdList, $template);
+        $message = $this->buildMultiMessages($altText, $templateList);
+        $response = $this->bot->multicast($userIdList, $message);
         if (!$response->isSucceeded()) {
             throw new MessageBuilderException($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());
         }

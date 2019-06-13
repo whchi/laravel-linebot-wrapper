@@ -80,9 +80,9 @@ trait MessageReplier
      * @param array $messages
      * @return void
      */
-    public function reply(string $altText, array $messageList): void
+    public function reply(string $altText, array $templateList): void
     {
-        $message = $this->buildMultiMessages($altText, $messageList);
+        $message = $this->buildMultiMessages($altText, $templateList);
         $this->replyMessage($message);
     }
 

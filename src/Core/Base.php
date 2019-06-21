@@ -89,7 +89,7 @@ class Base
 
     public function setContext($event)
     {
-        $this->replyToken = $event['replyToken'];
+        $this->replyToken = $event['replyToken'] ?? null;
         $this->eventType = $event['type'];
         $this->sourceType = $event['source']['type'];
         $this->userId = $event['source']['userId'];

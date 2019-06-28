@@ -29,9 +29,9 @@ class LINEBotContext extends LINEMessageBuilder
     /**
      * get message event payload
      *
-     * @return string|null
+     * @return array|null
      */
-    public function getMessagePayload(): ?string
+    public function getMessagePayload(): ?array
     {
         return $this->isMessageEvent() ? $this->rawEvent['message'] : null;
     }

@@ -22,19 +22,40 @@ class LINEBotContext extends LINEMessageBuilder
      * @param string $to
      * @return void
      */
-    public function setPushTo(string $to)
+    public function setPushTo(string $to): void
     {
         $this->pushTo = $to;
     }
-
-    public function getMessagePayload()
+    /**
+     * get message event payload
+     *
+     * @return string|null
+     */
+    public function getMessagePayload(): ?string
     {
         return $this->isMessageEvent() ? $this->rawEvent['message'] : null;
     }
 
-    public function getPostbackPayload()
+    /**
+     * get general postback event payload
+     *
+     * @see https://developers.line.biz/en/reference/messaging-api/#postback-event
+     * @return string|null
+     */
+    public function getPostbackPayload(): ?string
     {
         return $this->isPostBackEvent() ? $this->rawEvent['postback']['data'] : null;
+    }
+    /**
+     * get datetimepicker postback event payload
+     *
+     * @see https://developers.line.biz/en/reference/messaging-api/#postback-event
+     * @param string $key date | time | datetime
+     * @return string|null
+     */
+    public function getDateTimePostbackPayload(string $key): ?string
+    {
+        return $this->isPostbackEvent() ? $this->rawEvent['postback']['params'][$key] : null;
     }
 
     /**

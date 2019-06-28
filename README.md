@@ -169,6 +169,10 @@ $this->content->getMessagePayload();
 * get postback data
 ```php
 $this->context->getPostbackPayload();
+/**
+ * $key = 'datetime' | 'date' | 'time'
+ */
+$this->context->getDateTimePostbackPayload(string $key);
 ```
 * get user profile\
 more detail see [official doc](https://developers.line.biz/en/reference/messaging-api/#get-profile)

@@ -126,6 +126,8 @@ $this->context->push(string $altText,array $templateList)
 ```
 * #### multiple users
 ```php
+// max 150 user id
+// @see https://developers.line.biz/en/reference/messaging-api/#send-multicast-message
 $this->context->pushMulticast(array $memberIdList, string $altText, array $templateList)
 ```
 * #### flex

@@ -1,19 +1,21 @@
-<?php
 
+<?php
 $template = [
     'type' => 'bubble',
-    'styles' => collect([
+    'styles' =>
+    [
         'body' => [
             'backgroundColor' => '#000000',
         ],
         'hero' => [
             'separator' => true,
         ],
-    ]),
+    ],
     'header' => [
         "type" => "box",
         "layout" => "horizontal",
-        "contents" => collect([
+        "contents" =>
+        [
             [
                 "type" => "text",
                 "text" => "Hello get me a cup of coffee",
@@ -21,7 +23,7 @@ $template = [
                 "color" => "#aaaaaa",
                 "size" => "sm",
             ],
-        ]),
+        ],
     ],
     'hero' => [
         'type' => 'image',
@@ -30,6 +32,7 @@ $template = [
         'aspectRatio' => '20:13',
         'aspectMode' => 'cover',
         'action' => [
+            'label' => 'hellorld',
             'type' => 'uri',
             'uri' => 'http://linecorp.com/',
         ],
@@ -37,7 +40,8 @@ $template = [
     'body' => [
         'type' => 'box',
         'layout' => 'vertical',
-        'contents' => collect([
+        'contents' =>
+        [
             [
                 'type' => 'text',
                 'text' => 'Brown Cafe',
@@ -48,7 +52,8 @@ $template = [
                 'type' => 'box',
                 'layout' => 'baseline',
                 'margin' => 'md',
-                'contents' => collect([
+                'contents' =>
+                [
                     [
                         'type' => 'icon',
                         'size' => 'sm',
@@ -82,19 +87,21 @@ $template = [
                         'margin' => 'md',
                         'flex' => 0,
                     ],
-                ]),
+                ],
             ],
             [
                 'type' => 'box',
                 'layout' => 'vertical',
                 'margin' => 'lg',
                 'spacing' => 'sm',
-                'contents' => collect([
+                'contents' =>
+                [
                     [
                         'type' => 'box',
                         'layout' => 'baseline',
                         'spacing' => 'sm',
-                        'contents' => collect([
+                        'contents' =>
+                        [
                             [
                                 'type' => 'text',
                                 'text' => 'Place',
@@ -110,13 +117,14 @@ $template = [
                                 'size' => 'sm',
                                 'flex' => 5,
                             ],
-                        ]),
+                        ],
                     ],
                     [
                         'type' => 'box',
                         'layout' => 'baseline',
                         'spacing' => 'sm',
-                        'contents' => collect([
+                        'contents' =>
+                        [
                             [
                                 'type' => 'text',
                                 'text' => 'Time',
@@ -133,17 +141,18 @@ $template = [
                                 'flex' => 5,
                             ],
 
-                        ]),
+                        ],
                     ],
-                ]),
+                ],
             ],
-        ]),
+        ],
     ],
     'footer' => [
         'type' => 'box',
         'layout' => 'vertical',
         'spacing' => 'sm',
-        'contents' => collect([
+        'contents' =>
+        [
             [
                 'type' => 'button',
                 'style' => 'link',
@@ -168,7 +177,7 @@ $template = [
                 'type' => 'spacer',
                 'size' => 'sm',
             ],
-        ]),
+        ],
         'flex' => 0,
     ],
 ];

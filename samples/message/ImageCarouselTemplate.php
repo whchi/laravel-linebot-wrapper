@@ -1,7 +1,6 @@
 <?php
-
 $template = [
-    'columns' => collect([
+    'columns' => [
         [
             'imageUrl' => 'https://storage.googleapis.com/www-leadercampus-com-tw/leader/images/channel/201902/channel-5c6a55246f23c.jpg',
             'action' => [
@@ -26,5 +25,5 @@ $template = [
                 'uri' => 'https://www.cw.com.tw',
             ],
         ],
-    ]),
+    ],
 ];

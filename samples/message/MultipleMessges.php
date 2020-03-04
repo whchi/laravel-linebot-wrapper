@@ -18,7 +18,8 @@ $template = [
     // image carousel
     [
         'type' => 'image_carousel',
-        'columns' => collect([
+        'columns' => collect(
+            [
             [
                 'imageUrl' => 'https://storage.googleapis.com/www-leadercampus-com-tw/leader/images/channel/201902/channel-5c6a55246f23c.jpg',
                 'action' => [
@@ -43,68 +44,80 @@ $template = [
                     'uri' => 'https://www.cw.com.tw',
                 ],
             ],
-        ]),
+            ]
+        ),
     ],
     // carousel
     [
         'type' => 'carousel',
-        'columns' => collect([
+        'columns' => collect(
+            [
             [
                 'title' => '數位轉型',
                 'text' => '數位轉型關鍵對談',
                 'thumbnailImageUrl' => 'https://storage.googleapis.com/www-leadercampus-com-tw/leader/images/channel/201902/channel-5c6a55246f23c.jpg',
-                'actions' => collect([
+                'actions' => collect(
+                    [
                     [
                         'type' => 'uri',
                         'label' => 'Google',
                         'uri' => 'https://www.google.com',
                     ],
-                ]),
+                    ]
+                ),
             ],
             [
                 'title' => '學會學：學習之道',
                 'text' => '學會學：學習之道',
                 'thumbnailImageUrl' => 'https://storage.googleapis.com/www-leadercampus-com-tw/leader/images/article/201903/course-5c9c73495ccda.jpg',
-                'actions' => collect([
+                'actions' => collect(
+                    [
                     [
                         'type' => 'uri',
                         'label' => '創新學院官網',
                         'uri' => 'https://www.leadercampus.com.tw',
                     ],
-                ]),
+                    ]
+                ),
             ],
             [
                 'title' => '數位轉型從領導力開始',
                 'text' => '數位轉型從領導力開始',
                 'thumbnailImageUrl' => 'https://storage.googleapis.com/www-leadercampus-com-tw/leader/images/article/201901/course-5c3489c4ddcd5.jpg',
-                'actions' => collect([
+                'actions' => collect(
+                    [
                     [
                         'type' => 'uri',
                         'label' => '天下官網',
                         'uri' => 'https://www.cw.com.tw',
                     ],
-                ]),
+                    ]
+                ),
             ],
             [
                 'title' => 'postback title',
                 'text' => 'postback text',
                 'thumbnailImageUrl' => 'https://i.imgur.com/cVFzY9F.png',
-                'actions' => collect([
+                'actions' => collect(
+                    [
                     [
                         'type' => 'postback',
                         'label' => 'postback event',
                         'displayText' => 'postback event',
                         'data' => 'helloworld',
                     ],
-                ]),
+                    ]
+                ),
             ],
-        ]),
+            ]
+        ),
     ],
     // confirm
     [
         'type' => 'confirm',
         'text' => 'confirm text',
-        'actions' => collect([
+        'actions' => collect(
+            [
             [
                 'type' => 'uri',
                 'label' => '是',
@@ -116,7 +129,8 @@ $template = [
                 'displayText' => '動作 2',
                 'data' => '資料 2',
             ],
-        ]),
+            ]
+        ),
     ],
     // flex
     [
@@ -124,13 +138,16 @@ $template = [
         'contents' => [
             'type' => 'carousel',
             'contents' =>
-            collect([
+            collect(
                 [
-                    'styles' => collect([
+                [
+                    'styles' => collect(
+                        [
                         'body' => [
                             'backgroundColor' => '#aaaaaa',
                         ],
-                    ]),
+                        ]
+                    ),
                     'direction' => 'rtl',
                     'hero' =>
                     [
@@ -146,7 +163,8 @@ $template = [
                         'layout' => 'vertical',
                         'spacing' => 'sm',
                         'contents' =>
-                        collect([
+                        collect(
+                            [
                             [
                                 'type' => 'text',
                                 'text' => 'Arm Chair, White',
@@ -158,7 +176,8 @@ $template = [
                                 'type' => 'box',
                                 'layout' => 'baseline',
                                 'contents' =>
-                                collect([
+                                collect(
+                                    [
                                     [
                                         'type' => 'text',
                                         'text' => '$49',
@@ -175,9 +194,11 @@ $template = [
                                         'size' => 'sm',
                                         'flex' => 0,
                                     ],
-                                ]),
+                                    ]
+                                ),
                             ],
-                        ]),
+                            ]
+                        ),
                     ],
                     'footer' =>
                     [
@@ -185,7 +206,8 @@ $template = [
                         'layout' => 'vertical',
                         'spacing' => 'sm',
                         'contents' =>
-                        collect([
+                        collect(
+                            [
                             [
                                 'type' => 'button',
                                 'style' => 'primary',
@@ -205,7 +227,8 @@ $template = [
                                     'uri' => 'https://linecorp.com',
                                 ],
                             ],
-                        ]),
+                            ]
+                        ),
                     ],
                 ],
                 [
@@ -223,7 +246,8 @@ $template = [
                         'layout' => 'vertical',
                         'spacing' => 'sm',
                         'contents' =>
-                        collect([
+                        collect(
+                            [
                             [
                                 'type' => 'text',
                                 'text' => 'Metal Desk Lamp',
@@ -236,7 +260,8 @@ $template = [
                                 'layout' => 'baseline',
                                 'flex' => 1,
                                 'contents' =>
-                                collect([
+                                collect(
+                                    [
                                     [
                                         'type' => 'text',
                                         'text' => '$11',
@@ -253,7 +278,8 @@ $template = [
                                         'size' => 'sm',
                                         'flex' => 0,
                                     ],
-                                ]),
+                                    ]
+                                ),
                             ],
                             [
                                 'type' => 'text',
@@ -264,7 +290,8 @@ $template = [
                                 'color' => '#ff5551',
                                 'flex' => 0,
                             ],
-                        ]),
+                            ]
+                        ),
                     ],
                     'footer' =>
                     [
@@ -272,7 +299,8 @@ $template = [
                         'layout' => 'vertical',
                         'spacing' => 'sm',
                         'contents' =>
-                        collect([
+                        collect(
+                            [
                             [
                                 'type' => 'button',
                                 'flex' => 2,
@@ -294,7 +322,8 @@ $template = [
                                     'uri' => 'https://linecorp.com',
                                 ],
                             ],
-                        ]),
+                            ]
+                        ),
                     ],
                 ],
                 [
@@ -304,7 +333,8 @@ $template = [
                         'layout' => 'vertical',
                         'spacing' => 'sm',
                         'contents' =>
-                        collect([
+                        collect(
+                            [
                             [
                                 'type' => 'button',
                                 'flex' => 1,
@@ -316,10 +346,12 @@ $template = [
                                     'uri' => 'https://linecorp.com',
                                 ],
                             ],
-                        ]),
+                            ]
+                        ),
                     ],
                 ],
-            ]),
+                ]
+            ),
         ],
     ],
 ];

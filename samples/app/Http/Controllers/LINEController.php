@@ -31,13 +31,15 @@ class LineController extends Controller
         $lineInput = $request->all();
         $events = collect($lineInput['events']);
 
-        $events->each(function ($event) {
-            $this->context->setContext($event);
-            $this->context->buildState();
-            event(new SaveLineBotSessionEvent($event));
-            $template = [
+        $events->each(
+            function ($event) {
+                $this->context->setContext($event);
+                $this->context->buildState();
+                event(new SaveLineBotSessionEvent($event));
+                $template = [
                 'text' => 'confirm text',
-                'actions' => collect([
+                'actions' => collect(
+                    [
                     [
                         'type' => 'uri',
                         'label' => 'Yes',
@@ -49,16 +51,18 @@ class LineController extends Controller
                         'displayText' => 'No',
                         'data' => 'data=no',
                     ],
-                ]),
-            ];
+                    ]
+                ),
+                ];
 
-            if ($this->context->isMessageEvent()) {
-                $state = $this->context->getState('status');
-                $orderInfoHellp = $this->context->getState('orderInfo.hello');
-                $this->context->replyConfirmTemplate('confirm template text', $template);
-            } else {
-                $this->context->replyText('not implement yet');
+                if ($this->context->isMessageEvent()) {
+                    $state = $this->context->getState('status');
+                    $orderInfoHellp = $this->context->getState('orderInfo.hello');
+                    $this->context->replyConfirmTemplate('confirm template text', $template);
+                } else {
+                    $this->context->replyText('not implement yet');
+                }
             }
-        });
+        );
     }
 }

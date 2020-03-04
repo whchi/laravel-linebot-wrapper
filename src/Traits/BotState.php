@@ -2,9 +2,10 @@
 
 namespace Whchi\LaravelLineBotWrapper\Traits;
 
-use Cache;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Whchi\LaravelLineBotWrapper\Exceptions\BotStateException;
+
 trait BotState
 {
     /**
@@ -31,11 +32,14 @@ trait BotState
         $data = Cache::pull($this->botSessionId);
 
         $state = Arr::dot($state);
-        array_walk($data, function (&$ele, $idx) use ($state) {
-            if (array_key_exists($idx, $state)) {
-                $ele = $state[$idx];
+        array_walk(
+            $data,
+            function (&$ele, $idx) use ($state) {
+                if (array_key_exists($idx, $state)) {
+                    $ele = $state[$idx];
+                }
             }
-        });
+        );
 
         Cache::forever($this->botSessionId, $data);
     }
@@ -43,7 +47,7 @@ trait BotState
     /**
      * 取得 state by key
      *
-     * @param string $key parent.child
+     * @param  string $key parent.child
      * @return array state data
      */
     public function getState(string $key)

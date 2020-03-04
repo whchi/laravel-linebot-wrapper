@@ -7,27 +7,27 @@ use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
 
 trait MessageReplier
 {
-    public function replyButtonTemplate(string $altText, array $template): void
+    public function replyButton(string $altText, array $template): void
     {
-        $message = $this->buildButtonTemplateMessage($altText, $template);
+        $message = $this->buildButtonMessage($altText, $template);
         $this->replyMessage($message);
     }
 
-    public function replyConfirmTemplate(string $altText, array $template): void
+    public function replyConfirm(string $altText, array $template): void
     {
-        $message = $this->buildConfirmTemplateMessage($altText, $template);
+        $message = $this->buildConfirmMessage($altText, $template);
         $this->replyMessage($message);
     }
 
-    public function replyCarouselTemplate(string $altText, array $template): void
+    public function replyCarousel(string $altText, array $template): void
     {
-        $message = $this->buildCarouselTemplateMessage($altText, $template);
+        $message = $this->buildCarouselMessage($altText, $template);
         $this->replyMessage($message);
     }
 
-    public function replyImageCarouselTemplate(string $altText, array $template): void
+    public function replyImageCarousel(string $altText, array $template): void
     {
-        $message = $this->buildImageCarouselTemplateMessage($altText, $template);
+        $message = $this->buildImageCarouselMessage($altText, $template);
         $this->replyMessage($message);
     }
 
@@ -52,7 +52,6 @@ trait MessageReplier
     public function replyImageMap(string $altText, array $imageMap): void
     {
         $message = $this->buildImageMapMessage($altText, $imageMap);
-
         $this->replyMessage($message);
     }
 
@@ -77,12 +76,12 @@ trait MessageReplier
     /**
      * reply multi message
      *
-     * @param array $messages
+     * @param  array $messages
      * @return void
      */
     public function reply(string $altText, array $templateList): void
     {
-        $message = $this->buildMultiMessages($altText, $templateList);
+        $message = $this->buildMultiMessage($altText, $templateList);
         $this->replyMessage($message);
     }
 

@@ -4,29 +4,30 @@ namespace Whchi\LaravelLineBotWrapper\Traits;
 
 use LINE\LINEBot\MessageBuilder;
 use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
+
 trait MessagePusher
 {
-    public function pushButtonTemplate(string $altText, array $template): void
+    public function pushButton(string $altText, array $template): void
     {
-        $message = $this->buildButtonTemplateMessage($altText, $template);
+        $message = $this->buildButtonMessage($altText, $template);
         $this->pushMessage($message);
     }
 
-    public function pushConfirmTemplate(string $altText, array $template): void
+    public function pushConfirm(string $altText, array $template): void
     {
-        $message = $this->buildConfirmTemplateMessage($altText, $template);
+        $message = $this->buildConfirmMessage($altText, $template);
         $this->pushMessage($message);
     }
 
-    public function pushCarouselTemplate(string $altText, array $template): void
+    public function pushCarousel(string $altText, array $template): void
     {
-        $message = $this->buildCarouselTemplateMessage($altText, $template);
+        $message = $this->buildCarouselMessage($altText, $template);
         $this->pushMessage($message);
     }
 
-    public function pushImageCarouselTemplate(string $altText, array $template): void
+    public function pushImageCarousel(string $altText, array $template): void
     {
-        $message = $this->buildImageCarouselTemplateMessage($altText, $template);
+        $message = $this->buildImageCarouselMessage($altText, $template);
         $this->pushMessage($message);
     }
 
@@ -76,26 +77,26 @@ trait MessagePusher
     /**
      * push multi message
      *
-     * @param array $messages
+     * @param  array $messages
      * @return void
      */
     public function push(string $altText, array $templateList): void
     {
-        $message = $this->buildMultiMessages($altText, $templateList);
+        $message = $this->buildMultiMessage($altText, $templateList);
         $this->pushMessage($message);
     }
 
     /**
      * push to multiple users at a time
      *
-     * @param array $userIdList
-     * @param string $altText
-     * @param array $template
+     * @param  array  $userIdList
+     * @param  string $altText
+     * @param  array  $template
      * @return void
      */
     public function pushMulticast(array $userIdList, string $altText, array $templateList): void
     {
-        $message = $this->buildMultiMessages($altText, $templateList);
+        $message = $this->buildMultiMessage($altText, $templateList);
         $response = $this->bot->multicast($userIdList, $message);
         if (!$response->isSucceeded()) {
             throw new MessageBuilderException($response->getHTTPStatus() . PHP_EOL . $response->getRawBody());

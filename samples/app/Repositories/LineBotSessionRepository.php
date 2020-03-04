@@ -14,40 +14,42 @@ class LineBotSessionRepository
     public function saveSession(array $data): void
     {
         switch ($data['source']['type']) {
-            case 'group':
-                break;
-            case 'room':
-                break;
-            default:
-                LineBotSession::create([
-                    'user_id' => $data['source']['userId'],
-                    'session_type' => $data['source']['type'],
-                    'last_activity' => time(),
-                ]);
-                break;
+        case 'group':
+            break;
+        case 'room':
+            break;
+        default:
+            LineBotSession::create(
+                [
+                'user_id' => $data['source']['userId'],
+                'session_type' => $data['source']['type'],
+                'last_activity' => time(),
+                ]
+            );
+            break;
         }
     }
     /**
      * line event data
      *
-     * @param array $data
+     * @param  array $data
      * @return void
      */
     public function getSession(array $data)
     {
         switch ($data['source']['type']) {
-            case 'group':
-            case 'room':
-                // not implement yet
-                break;
-            default:
-                return LineBotSession::where('user_id', $data['source']['userId'])->first();
+        case 'group':
+        case 'room':
+            // not implement yet
+            break;
+        default:
+            return LineBotSession::where('user_id', $data['source']['userId'])->first();
         }
     }
 
     /**
      *
-     * @param LineBotSession $model
+     * @param  LineBotSession $model
      * @return void
      */
     public function modifyLastActivity(LineBotSession $model): void

@@ -20,7 +20,7 @@ $template = [
             'label' => 'See More',
         ],
     ],
-    'actions' => collect([
+    'actions' => [
         [
             'type' => 'message',
             'text' => 'message',
@@ -31,5 +31,5 @@ $template = [
                 'height' => 375,
             ],
         ],
-    ]),
+    ],
 ];

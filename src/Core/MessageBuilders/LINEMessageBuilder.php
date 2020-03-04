@@ -2,6 +2,7 @@
 
 namespace Whchi\LaravelLineBotWrapper\Core\MessageBuilders;
 
+use Illuminate\Support\Str;
 use LINE\LINEBot\MessageBuilder\AudioMessageBuilder;
 use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 use LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder;
@@ -18,36 +19,48 @@ use LINE\LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\MessageBuilder\VideoMessageBuilder;
+use Whchi\LaravelLineBotWrapper\Constant\FlexBoxElement;
+use Whchi\LaravelLineBotWrapper\Constant\GeneralMessageType;
+use Whchi\LaravelLineBotWrapper\Constant\TemplateMessageType;
 use Whchi\LaravelLineBotWrapper\Core\Base;
 use Whchi\LaravelLineBotWrapper\Core\MessageBuilders\FlexMessageBuilder\LINEFlexMessageBuilder;
-use Whchi\LaravelLineBotWrapper\Core\MessageBuilders\Helpers\LINETemplateBuilderHelper;
 use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
+use Whchi\LaravelLineBotWrapper\Traits\MessageBuilder;
+use Whchi\LaravelLineBotWrapper\Traits\MessageValidator;
 
 class LINEMessageBuilder extends Base
 {
 
+    use MessageValidator, MessageBuilder;
+
+    const MULTI_MESSAGE_LIMIT = 5;
+
     /**
      * build button template
      *
-     * @param array $template
+     * @param  array $template
      * @return ButtonTemplateBuilder
      */
-    protected function buildButtonTemplateMessage(string $altText, array $template): TemplateMessageBuilder
+    protected function buildButtonMessage(string $altText, array $template): TemplateMessageBuilder
     {
-        $actions = $template['actions']->map(function ($action) {
-            return LINETemplateBuilderHelper::getAction($action);
-        })->toArray();
-        // optional
+        $this->validate($template, ['actions' => 'required|array']);
+
+        $actions = [];
+
+        foreach ($template['actions'] as $action) {
+            array_push($actions, $this->getAction($action));
+        }
+
         $template['title'] = $template['title'] ?? null;
         $template['thumbnailImageUrl'] = $template['thumbnailImageUrl'] ?? null;
         $template['imageAspectRatio'] = $template['imageAspectRatio'] ?? null;
         $template['imageSize'] = $template['imageSize'] ?? null;
         $template['imageBackgroundColor'] = $template['imageBackgroundColor'] ?? null;
         $defaultAction = (isset($template['defaultAction']))
-        ? LINETemplateBuilderHelper::getAction($template['defaultAction'])
+        ? $this->getAction($template['defaultAction'])
         : null;
 
-        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        $quickReply = $this->buildQuickReply($template);
 
         $buttons = new ButtonTemplateBuilder(
             $template['title'],
@@ -66,16 +79,19 @@ class LINEMessageBuilder extends Base
     /**
      * build confirm template
      *
-     * @param array $template
+     * @param  array $template
      * @return ConfirmTemplateBuilder
      */
-    protected function buildConfirmTemplateMessage(string $altText, array $template): TemplateMessageBuilder
+    protected function buildConfirmMessage(string $altText, array $template): TemplateMessageBuilder
     {
-        $actions = $template['actions']->map(function ($action) {
-            return LINETemplateBuilderHelper::getAction($action);
-        })->toArray();
+        $this->validate($template, ['actions' => 'required|array|max:2', 'text' => 'required|max:240']);
+        $actions = [];
 
-        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        foreach ($template['actions'] as $action) {
+            array_push($actions, $this->getAction($action));
+        }
+
+        $quickReply = $this->buildQuickReply($template);
 
         $buttons = new ConfirmTemplateBuilder(
             $template['text'],
@@ -89,29 +105,47 @@ class LINEMessageBuilder extends Base
     /**
      * build carousel template
      *
-     * @param array $template
+     * @param  array $template
      * @return CarouselTemplateBuilder
      */
-    protected function buildCarouselTemplateMessage(string $altText, array $template): TemplateMessageBuilder
+    protected function buildCarouselMessage(string $altText, array $template): TemplateMessageBuilder
     {
-        $columns = $template['columns']->map(function ($ele) {
-            $title = $ele['title'];
-            $text = $ele['text'];
-            $image = $ele['thumbnailImageUrl'];
-            $actions = $ele['actions']->map(function ($action) {
-                return LINETemplateBuilderHelper::getAction($action);
-            })->toArray();
+        $this->validate(
+            $template,
+            [
+                'columns' => 'required|array|max:10',
+                'columns.*.text' => 'required|string|max:120',
+                'columns.*.actions' => 'required|array|max:3',
+            ]
+        );
 
-            // optional
-            $imageBackgroundColor = $ele['imageBackgroundColor'] ?? null;
+        $columns = [];
+        foreach ($template['columns'] as $column) {
+            $text = $column['text'];
+            $actions = [];
+            foreach ($column['actions'] as $action) {
+                array_push($actions, $this->getAction($action));
+            }
 
-            return new CarouselColumnTemplateBuilder($title, $text, $image, $actions, $imageBackgroundColor);
-        })->toArray();
-        // optional
+            $title = $column['title'] ?? null;
+            $image = $column['thumbnailImageUrl'] ?? null;
+            $imageBackgroundColor = $columns['imageBackgroundColor'] ?? null;
+
+            array_push(
+                $columns,
+                new CarouselColumnTemplateBuilder(
+                    $title,
+                    $text,
+                    $image,
+                    $actions,
+                    $imageBackgroundColor
+                )
+            );
+        }
         $template['imageAspectRatio'] = $template['imageAspectRatio'] ?? null;
         $template['imageSize'] = $template['imageSize'] ?? null;
 
-        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        $quickReply = $this->buildQuickReply($template);
 
         $carousel = new CarouselTemplateBuilder($columns, $template['imageAspectRatio'], $template['imageSize']);
         $message = new TemplateMessageBuilder($altText, $carousel, $quickReply);
@@ -119,16 +153,25 @@ class LINEMessageBuilder extends Base
         return $message;
     }
 
-    protected function buildImageCarouselTemplateMessage(string $altText, array $template): TemplateMessageBuilder
+    protected function buildImageCarouselMessage(string $altText, array $template): TemplateMessageBuilder
     {
-        $columns = $template['columns']->map(function ($ele) {
-            $imageUri = $ele['imageUrl'];
-            $action = LINETemplateBuilderHelper::getAction($ele['action'], true);
+        $this->validate(
+            $template,
+            [
+                'columns' => 'required|array|max:10',
+                'columns.*.imageUrl' => 'required',
+                'columns.*.action' => 'required|array',
+            ]
+        );
+        $columns = [];
+        foreach ($template['columns'] as $column) {
+            $imageUri = $column['imageUrl'];
+            $action = $this->getAction($column['action'], true);
 
-            return new ImageCarouselColumnTemplateBuilder($imageUri, $action);
-        })->toArray();
+            array_push($columns, new ImageCarouselColumnTemplateBuilder($imageUri, $action));
+        }
 
-        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        $quickReply = $this->buildQuickReply($template);
 
         $imageCarousel = new ImageCarouselTemplateBuilder($columns);
         $message = new TemplateMessageBuilder($altText, $imageCarousel, $quickReply);
@@ -138,24 +181,40 @@ class LINEMessageBuilder extends Base
 
     protected function buildImageMapMessage(string $altText, array $template): ImagemapMessageBuilder
     {
+        $this->validate(
+            $template,
+            [
+                'baseUrl' => 'required|max:1000',
+                'baseSize.width' => 'required|integer',
+                'baseSize.height' => 'required|integer',
+                'actions' => 'required|array|max:50',
+                'actions.*.type' => 'required|in:uri,message',
+                'actions.*.area' => 'required|array',
+                'actions.*.text' => 'required_if:actions.*.type,message',
+                'actions.*.linkUri' => 'required_if:actions.*.type,uri',
+                'actions.*.area.*' => 'required|integer',
+            ]
+        );
+
         $baseUrl = $template['baseUrl'];
-        $baseSize = LINETemplateBuilderHelper::getImageMapBaseSize($template['baseSize']);
+        $baseSize = $this->getImageMapBaseSize($template['baseSize']);
 
         $videoBuilder = (isset($template['video']))
-        ? LINETemplateBuilderHelper::getImageMapVideoBuilder($template['video'])
+        ? $this->getImageMapVideoBuilder($template['video'])
         : null;
 
-        $imageMapActions = $template['actions']->map(function ($action) {
-            return LINETemplateBuilderHelper::getImageMapAction($action);
-        })->toArray();
+        $actions = [];
+        foreach ($template['actions'] as $action) {
+            array_push($actions, $this->getImageMapAction($action));
+        }
 
-        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        $quickReply = $this->buildQuickReply($template);
 
         $message = new ImagemapMessageBuilder(
             $baseUrl,
             $altText,
             $baseSize,
-            $imageMapActions,
+            $actions,
             $quickReply,
             $videoBuilder
         );
@@ -165,31 +224,44 @@ class LINEMessageBuilder extends Base
 
     protected function buildAudioMessage(array $template): AudioMessageBuilder
     {
-        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        $this->validate($template, ['originalContentUrl' => 'required', 'duration' => 'required|numeric']);
+        $quickReply = $this->buildQuickReply($template);
         return new AudioMessageBuilder($template['originalContentUrl'], $template['duration'], $quickReply);
     }
 
     protected function buildVideoMessage(array $template): VideoMessageBuilder
     {
-        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        $this->validate($template, ['originalContentUrl' => 'required', 'previewImageUrl' => 'required']);
+        $quickReply = $this->buildQuickReply($template);
         return new VideoMessageBuilder($template['originalContentUrl'], $template['previewImageUrl'], $quickReply);
     }
 
     protected function buildImageMessage(array $template): ImageMessageBuilder
     {
-        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        $this->validate($template, ['originalContentUrl' => 'required', 'previewImageUrl' => 'required']);
+        $quickReply = $this->buildQuickReply($template);
         return new ImageMessageBuilder($template['originalContentUrl'], $template['previewImageUrl'], $quickReply);
     }
 
     protected function buildStickerMessage(array $template): StickerMessageBuilder
     {
-        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        $this->validate($template, ['packageId' => 'required|integer', 'stickerId' => 'required|integer']);
+        $quickReply = $this->buildQuickReply($template);
         return new StickerMessageBuilder($template['packageId'], $template['stickerId'], $quickReply);
     }
 
     protected function buildLocationMessage(array $template): LocationMessageBuilder
     {
-        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        $this->validate(
+            $template,
+            [
+                'title' => 'required|max:100',
+                'address' => 'required|max:100',
+                'lat' => 'required|numeric',
+                'lon' => 'required|numeric',
+            ]
+        );
+        $quickReply = $this->buildQuickReply($template);
         return new LocationMessageBuilder(
             $template['title'],
             $template['address'],
@@ -201,59 +273,42 @@ class LINEMessageBuilder extends Base
 
     protected function buildTextMessage(array $template): TextMessageBuilder
     {
-        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
-
+        $this->validate($template, ['text' => 'required|max:2000']);
+        $quickReply = $this->buildQuickReply($template);
         return new TextMessageBuilder($template['text'], $quickReply);
     }
 
-    protected function buildMultiMessages(string $altText, array $messageList): MultiMessageBuilder
+    protected function buildMultiMessage(string $altText, array $messageList): MultiMessageBuilder
     {
-        if (count($messageList) > 5) {
-            throw new MessageBuilderException('You can only combine 5 messages at a time');
+        if (count($messageList) > self::MULTI_MESSAGE_LIMIT) {
+            throw new MessageBuilderException('You can only combine ' . self::MULTI_MESSAGE_LIMIT . ' messages at a time');
         }
-
         $builder = new MultiMessageBuilder();
 
+        $generalTypes = GeneralMessageType::getConstants();
+        $templateTypes = TemplateMessageType::getConstants();
+        $allMessageTypes = $generalTypes + $templateTypes;
+
         foreach ($messageList as $message) {
-            switch ($message['type']) {
-                case 'text':
-                    $builder->add($this->buildTextMessage($message));
-                    break;
-                case 'sticker':
-                    $builder->add($this->buildStickerMessage($message));
-                    break;
-                case 'button':
-                    $builder->add($this->buildButtonTemplateMessage($altText, $message));
-                    break;
-                case 'confirm':
-                    $builder->add($this->buildConfirmTemplateMessage($altText, $message));
-                    break;
-                case 'imagemap':
-                    $builder->add($this->buildImageMapMessage($altText, $message));
-                    break;
-                case 'image':
-                    $builder->add($this->buildImageMessage($message));
-                    break;
-                case 'image_carousel':
-                    $builder->add($this->buildImageCarouselTemplateMessage($altText, $message));
-                    break;
-                case 'carousel':
-                    $builder->add($this->buildCarouselTemplateMessage($altText, $message));
-                    break;
-                case 'audio':
-                    $builder->add($this->buildAudioMessage($message));
-                    break;
-                case 'video':
-                    $builder->add($this->buildVideoMessage($message));
-                    break;
-                case 'location':
-                    $builder->add($this->buildLocationMessage($message));
-                    break;
-                case 'flex':
-                    $builder->add($this->buildFlexMessage($altText, $message['contents']));
-                    break;
-                default:
-                    throw new MessageBuilderException('Invalid message type');
+            $type = $message['type'];
+            if (!in_array($type, $allMessageTypes)) {
+                throw new MessageBuilderException('Invalid message type');
+            }
+            if (in_array($type, $generalTypes)) {
+                $builder->add(
+                    call_user_func(
+                        [$this, 'build' . ucfirst(Str::camel($type)) . 'Message'], $message
+                    )
+                );
+            } elseif (in_array($type, $templateTypes)) {
+                if ($type === TemplateMessageType::FLEX) {
+                    $message = $message['contents'];
+                }
+                $builder->add(
+                    call_user_func(
+                        [$this, 'build' . ucfirst(Str::camel($type)) . 'Message'], $altText, $message
+                    )
+                );
             }
         }
         return $builder;
@@ -261,11 +316,37 @@ class LINEMessageBuilder extends Base
 
     protected function buildFlexMessage(string $altText, array $template): FlexMessageBuilder
     {
+        $boxValidationRule = [];
+
+        $types = FlexBoxElement::getConstants();
+
+        foreach ($types as $type) {
+            $boxValidationRule[$type] = 'nullable|array';
+            if ($type === 'hero') {
+                $boxValidationRule[$type . '.url'] = 'required_if:hero.type,image';
+                $boxValidationRule[$type . '.contents'] = 'required_if:hero.type,box|array';
+                $boxValidationRule[$type . '.contents.*.action'] = 'nullable|array';
+                continue;
+            }
+            $boxValidationRule[$type . '.layout'] = 'sometimes|required';
+            $boxValidationRule[$type . '.contents'] = 'sometimes|required|array';
+            $boxValidationRule[$type . '.contents.*.action'] = 'nullable|array';
+        }
+
+        $this->validate(
+            $template, [
+            'type' => 'required|in:bubble,carousel',
+            'styles' => 'nullable|array',
+            'contents' => 'required_if:type,carousel|array|max:10',
+            'contents.*.styles' => 'nullable|array',
+            ] + $boxValidationRule
+        );
+
         $flex = new LINEFlexMessageBuilder($template['type']);
         $flex->createComponents($template);
-        $container = $flex->getContainer();
 
-        $quickReply = LINETemplateBuilderHelper::buildQuickReply($template);
+        $container = $flex->getContainer();
+        $quickReply = $this->buildQuickReply($template);
 
         $builder = new FlexMessageBuilder($altText, $container, $quickReply);
         return $builder;

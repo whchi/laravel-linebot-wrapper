@@ -18,11 +18,9 @@ class LINEBotServiceProvider extends ServiceProvider
     public function boot()
     {
         $configSrc = realpath($raw = __DIR__ . '/../config/linebot.php') ?: $raw;
-        $migrationSrc = realpath($raw = __DIR__ . '/../database/migrations/') ?: $raw;
 
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
             $this->publishes([$configSrc => config_path('linebot.php')], 'config');
-            $this->loadMigrationsFrom($migrationSrc);
         }
 
         $this->mergeConfigFrom($configSrc, 'linebot');
@@ -36,7 +34,8 @@ class LINEBotServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            'LINEBotContext', function ($app) {
+            'LINEBotContext',
+            function ($app) {
                 return new LINEBotContext;
             }
         );

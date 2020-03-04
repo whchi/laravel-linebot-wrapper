@@ -2,7 +2,7 @@
 
 $template = [
     'quickReply' => [
-        'items' => collect([
+        'items' => [
             [
                 'type' => 'action',
                 'imageUrl' => 'https://example.com/sushi.png',
@@ -22,6 +22,6 @@ $template = [
                     'text' => 'text',
                 ],
             ],
-        ]),
+        ],
     ],
 ];

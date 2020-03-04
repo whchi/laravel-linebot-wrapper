@@ -10,7 +10,7 @@ $template = [
     ],
     'imageAspectRatio' => 'rectangle',
     'imageSize' => 'cover',
-    'actions' => collect([
+    'actions' => [
         [
             'type' => 'uri',
             'label' => '動作 1',
@@ -27,5 +27,5 @@ $template = [
             'label' => '動作 3',
             'text' => '動作 3',
         ],
-    ]),
+    ],
 ];

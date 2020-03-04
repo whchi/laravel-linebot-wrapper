@@ -19,7 +19,7 @@ class LINEBotContext extends LINEMessageBuilder
     /**
      * push_api, can be userId / groupId / roomId
      *
-     * @param string $to
+     * @param  string $to
      * @return void
      */
     public function setPushTo(string $to): void
@@ -39,7 +39,7 @@ class LINEBotContext extends LINEMessageBuilder
     /**
      * get general postback event payload
      *
-     * @see https://developers.line.biz/en/reference/messaging-api/#postback-event
+     * @see    https://developers.line.biz/en/reference/messaging-api/#postback-event
      * @return string|null
      */
     public function getPostbackPayload(): ?string
@@ -49,8 +49,8 @@ class LINEBotContext extends LINEMessageBuilder
     /**
      * get datetimepicker postback event payload
      *
-     * @see https://developers.line.biz/en/reference/messaging-api/#postback-event
-     * @param string $key date | time | datetime
+     * @see    https://developers.line.biz/en/reference/messaging-api/#postback-event
+     * @param  string $key date | time | datetime
      * @return string|null
      */
     public function getDateTimePostbackPayload(string $key): ?string

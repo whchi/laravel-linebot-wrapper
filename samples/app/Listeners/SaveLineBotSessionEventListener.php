@@ -20,7 +20,7 @@ class SaveLineBotSessionEventListener implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  Event  $event
+     * @param  Event $event
      * @return void
      */
     public function handle(SaveLineBotSessionEvent $event)

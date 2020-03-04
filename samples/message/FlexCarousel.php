@@ -1,15 +1,15 @@
 <?php
-
 $template = [
     'type' => 'carousel',
     'contents' =>
-    collect([
+    [
         [
-            'styles' => collect([
+            'styles' =>
+            [
                 'body' => [
                     'backgroundColor' => '#aaaaaa',
                 ],
-            ]),
+            ],
             'direction' => 'rtl',
             'hero' =>
             [
@@ -25,7 +25,7 @@ $template = [
                 'layout' => 'vertical',
                 'spacing' => 'sm',
                 'contents' =>
-                collect([
+                [
                     [
                         'type' => 'text',
                         'text' => 'Arm Chair, White',
@@ -37,7 +37,7 @@ $template = [
                         'type' => 'box',
                         'layout' => 'baseline',
                         'contents' =>
-                        collect([
+                        [
                             [
                                 'type' => 'text',
                                 'text' => '$49',
@@ -54,9 +54,9 @@ $template = [
                                 'size' => 'sm',
                                 'flex' => 0,
                             ],
-                        ]),
+                        ],
                     ],
-                ]),
+                ],
             ],
             'footer' =>
             [
@@ -64,7 +64,7 @@ $template = [
                 'layout' => 'vertical',
                 'spacing' => 'sm',
                 'contents' =>
-                collect([
+                [
                     [
                         'type' => 'button',
                         'style' => 'primary',
@@ -84,7 +84,7 @@ $template = [
                             'uri' => 'https://linecorp.com',
                         ],
                     ],
-                ]),
+                ],
             ],
         ],
 
@@ -103,7 +103,7 @@ $template = [
                 'layout' => 'vertical',
                 'spacing' => 'sm',
                 'contents' =>
-                collect([
+                [
                     [
                         'type' => 'text',
                         'text' => 'Metal Desk Lamp',
@@ -116,7 +116,7 @@ $template = [
                         'layout' => 'baseline',
                         'flex' => 1,
                         'contents' =>
-                        collect([
+                        [
                             [
                                 'type' => 'text',
                                 'text' => '$11',
@@ -133,7 +133,7 @@ $template = [
                                 'size' => 'sm',
                                 'flex' => 0,
                             ],
-                        ]),
+                        ],
                     ],
                     [
                         'type' => 'text',
@@ -144,7 +144,7 @@ $template = [
                         'color' => '#ff5551',
                         'flex' => 0,
                     ],
-                ]),
+                ],
             ],
             'footer' =>
             [
@@ -152,7 +152,7 @@ $template = [
                 'layout' => 'vertical',
                 'spacing' => 'sm',
                 'contents' =>
-                collect([
+                [
                     [
                         'type' => 'button',
                         'flex' => 2,
@@ -174,7 +174,7 @@ $template = [
                             'uri' => 'https://linecorp.com',
                         ],
                     ],
-                ]),
+                ],
             ],
         ],
 
@@ -185,7 +185,7 @@ $template = [
                 'layout' => 'vertical',
                 'spacing' => 'sm',
                 'contents' =>
-                collect([
+                [
                     [
                         'type' => 'button',
                         'flex' => 1,
@@ -197,8 +197,8 @@ $template = [
                             'uri' => 'https://linecorp.com',
                         ],
                     ],
-                ]),
+                ],
             ],
         ],
-    ]),
+    ],
 ];

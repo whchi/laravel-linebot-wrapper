@@ -2,7 +2,7 @@
 
 $template = [
     'text' => 'confirm text',
-    'actions' => collect([
+    'actions' => [
         [
             'type' => 'uri',
             'label' => 'Yes',
@@ -14,5 +14,5 @@ $template = [
             'displayText' => 'No',
             'data' => 'data=no',
         ],
-    ]),
+    ],
 ];

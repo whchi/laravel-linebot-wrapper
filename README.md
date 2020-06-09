@@ -1,3 +1,5 @@
+![](https://img.shields.io/packagist/l/whchi/laravel-linebot-wrapper?style=flat-square&color=navy) ![](https://img.shields.io/packagist/dt/whchi/laravel-linebot-wrapper?style=flat-square) ![](https://img.shields.io/packagist/v/whchi/laravel-linebot-wrapper?style=flat-square&color=blue)
+
 A simple wrapper of `linecorp/line-bot-sdk`
 
 Inspired by [bottener.js](https://github.com/Yoctol/bottender)

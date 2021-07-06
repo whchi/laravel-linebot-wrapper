@@ -33,7 +33,7 @@ class LINEBotServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(HTTPClient::class, function ($app) {
+        $this->app->singleton(HTTPClient::class, function ($app) {
             return new CurlHTTPClient(config('linebot.channel_access_token'));
         });
         $this->app->singleton(LINEBot::class, function ($app) {

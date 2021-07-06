@@ -1,6 +1,6 @@
 <?php
 
-namespace Whchi\LaravelLineBotWrapper\Abstracts;
+namespace Whchi\LaravelLineBotWrapper\Constant;
 
 use ReflectionClass;
 

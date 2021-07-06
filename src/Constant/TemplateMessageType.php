@@ -2,8 +2,6 @@
 
 namespace Whchi\LaravelLineBotWrapper\Constant;
 
-use Whchi\LaravelLineBotWrapper\Abstracts\InteractWithAttribute;
-
 class TemplateMessageType extends InteractWithAttribute
 {
     public const CONFIRM = 'confirm';

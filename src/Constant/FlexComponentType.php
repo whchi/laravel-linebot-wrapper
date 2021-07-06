@@ -2,8 +2,6 @@
 
 namespace Whchi\LaravelLineBotWrapper\Constant;
 
-use Whchi\LaravelLineBotWrapper\Abstracts\InteractWithAttribute;
-
 class FlexComponentType extends InteractWithAttribute
 {
     public const BOX = 'box';

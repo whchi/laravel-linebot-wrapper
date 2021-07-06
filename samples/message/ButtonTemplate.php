@@ -1,4 +1,5 @@
 <?php
+
 $template = [
     'title' => 'title',
     'text' => 'text',

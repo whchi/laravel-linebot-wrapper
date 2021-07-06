@@ -1,6 +1,7 @@
 <?php
 
-namespace Whchi\LaravelLineBotWrapper\Traits;
+
+namespace Whchi\LaravelLineBotWrapper\MessageBuilders;
 
 use LINE\LINEBot\ImagemapActionBuilder\AreaBuilder;
 use LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder;
@@ -19,8 +20,11 @@ use LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder;
 use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
 use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
 
-trait MessageBuilder
+class Base
 {
+    /**
+     * @throws MessageBuilderException
+     */
     public function buildQuickReply(array $template)
     {
         $quickReply = null;
@@ -40,60 +44,66 @@ trait MessageBuilder
         return $quickReply;
     }
 
+    /**
+     * @throws MessageBuilderException
+     */
     public function getAction(array $action, bool $isImageCarousel = false)
     {
         if ($isImageCarousel) {
             $action['label'] = $action['label'] ?? null;
             if (mb_strlen($action['label']) > 12) {
-                throw new MessageBuilderException('label size exceed limit');
+                throw new MessageBuilderException('label size exceed limit, max: 12');
             }
         }
         if (mb_strlen($action['label']) > 20) {
-            throw new MessageBuilderException('label size exceed limit');
+            throw new MessageBuilderException('label size exceed limit, max: 20');
         }
 
         switch ($action['type']) {
-        case 'postback':
-            return new PostbackTemplateActionBuilder($action['label'], $action['data'], $action['displayText']);
-        case 'uri':
-            return new UriTemplateActionBuilder($action['label'], $action['uri']);
-        case 'message':
-            return new MessageTemplateActionBuilder($action['label'], $action['text']);
-        case 'datetimepicker':
-            $action['initial'] = $action['initial'] ?? null;
-            $action['max'] = $action['max'] ?? null;
-            $action['min'] = $action['min'] ?? null;
-            return new DatetimePickerTemplateActionBuilder(
-                $action['label'],
-                $action['data'],
-                $action['mode'],
-                $action['initial'],
-                $action['max'],
-                $action['min']
-            );
-        case 'cameraRoll':
-            return new CameraRollTemplateActionBuilder($action['label']);
-        case 'camera':
-            return new CameraTemplateActionBuilder($action['label']);
-        case 'location':
-            return new LocationTemplateActionBuilder($action['label']);
-        default:
-            throw new MessageBuilderException('Invalid template action type');
+            case 'postback':
+                return new PostbackTemplateActionBuilder($action['label'], $action['data'], $action['displayText']);
+            case 'uri':
+                return new UriTemplateActionBuilder($action['label'], $action['uri']);
+            case 'message':
+                return new MessageTemplateActionBuilder($action['label'], $action['text']);
+            case 'datetimepicker':
+                $action['initial'] = $action['initial'] ?? null;
+                $action['max'] = $action['max'] ?? null;
+                $action['min'] = $action['min'] ?? null;
+                return new DatetimePickerTemplateActionBuilder(
+                    $action['label'],
+                    $action['data'],
+                    $action['mode'],
+                    $action['initial'],
+                    $action['max'],
+                    $action['min']
+                );
+            case 'cameraRoll':
+                return new CameraRollTemplateActionBuilder($action['label']);
+            case 'camera':
+                return new CameraTemplateActionBuilder($action['label']);
+            case 'location':
+                return new LocationTemplateActionBuilder($action['label']);
+            default:
+                throw new MessageBuilderException('Invalid template action type');
         }
     }
 
+    /**
+     * @throws MessageBuilderException
+     */
     public function getImageMapAction(array $action)
     {
         $area = $action['area'];
         $area = new AreaBuilder($area['x'], $area['y'], $area['width'], $area['height']);
 
         switch ($action['type']) {
-        case 'uri':
-            return new ImagemapUriActionBuilder($action['linkUri'], $area);
-        case 'message':
-            return new ImagemapMessageActionBuilder($action['text'], $area);
-        default:
-            throw new MessageBuilderException('Invalid image map action type');
+            case 'uri':
+                return new ImagemapUriActionBuilder($action['linkUri'], $area);
+            case 'message':
+                return new ImagemapMessageActionBuilder($action['text'], $area);
+            default:
+                throw new MessageBuilderException('Invalid image map action type');
         }
     }
 

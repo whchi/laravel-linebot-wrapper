@@ -16,14 +16,18 @@ php artisan vendor:publish --provider="Whchi\LaravelLineBotWrapper\LINEBotServic
 3. setup config `config/linebot.php`
 ```php
 return [
-    'channelAccessToken' => 'find it in your LINE console'
-    'channelSecret' => 'find it in your LINE console'
+    'channel_access_token' => 'find it in your LINE console'
+    'channel_secret' => 'find it in your LINE console'
 ];
 ```
 4. run migration: create a table named `line_bot_sessions`
 5. start use, see sample in [app sample](https://github.com/whchi/laravel-linebot-wrapper/tree/master/samples/app)
 > remember to remove VerifyCsrfToken for line route
 # Usage
+## sdk functions
+```php
+$this->context->sdk('replyText', [$event['replyToken'], 'hello']);
+```
 ## Initialize
 In your webhook entry point
 ```php

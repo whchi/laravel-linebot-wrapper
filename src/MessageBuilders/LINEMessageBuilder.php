@@ -1,7 +1,8 @@
 <?php
 
-namespace Whchi\LaravelLineBotWrapper\Core\MessageBuilders;
+namespace Whchi\LaravelLineBotWrapper\MessageBuilders;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use LINE\LINEBot\MessageBuilder\AudioMessageBuilder;
 use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
@@ -22,24 +23,32 @@ use LINE\LINEBot\MessageBuilder\VideoMessageBuilder;
 use Whchi\LaravelLineBotWrapper\Constant\FlexBoxElement;
 use Whchi\LaravelLineBotWrapper\Constant\GeneralMessageType;
 use Whchi\LaravelLineBotWrapper\Constant\TemplateMessageType;
-use Whchi\LaravelLineBotWrapper\Core\Base;
-use Whchi\LaravelLineBotWrapper\Core\MessageBuilders\FlexMessageBuilder\LINEFlexMessageBuilder;
 use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
-use Whchi\LaravelLineBotWrapper\Traits\MessageBuilder;
-use Whchi\LaravelLineBotWrapper\Traits\MessageValidator;
 
 class LINEMessageBuilder extends Base
 {
 
-    use MessageValidator, MessageBuilder;
-
     const MULTI_MESSAGE_LIMIT = 5;
+
+    /**
+     * @throws MessageBuilderException
+     */
+    private function validate(array $ipt, array $rule)
+    {
+        $validator = Validator::make($ipt, $rule);
+        if ($validator->fails()) {
+            throw new MessageBuilderException($validator->errors()
+                                                        ->__toString());
+        }
+    }
 
     /**
      * build button template
      *
-     * @param  array $template
-     * @return ButtonTemplateBuilder
+     * @param string $altText
+     * @param array $template
+     * @return TemplateMessageBuilder
+     * @throws MessageBuilderException
      */
     protected function buildButtonMessage(string $altText, array $template): TemplateMessageBuilder
     {
@@ -57,8 +66,8 @@ class LINEMessageBuilder extends Base
         $template['imageSize'] = $template['imageSize'] ?? null;
         $template['imageBackgroundColor'] = $template['imageBackgroundColor'] ?? null;
         $defaultAction = (isset($template['defaultAction']))
-        ? $this->getAction($template['defaultAction'])
-        : null;
+            ? $this->getAction($template['defaultAction'])
+            : null;
 
         $quickReply = $this->buildQuickReply($template);
 
@@ -72,15 +81,16 @@ class LINEMessageBuilder extends Base
             $template['imageBackgroundColor'],
             $defaultAction
         );
-        $message = new TemplateMessageBuilder($altText, $buttons, $quickReply);
-        return $message;
+        return new TemplateMessageBuilder($altText, $buttons, $quickReply);
     }
 
     /**
      * build confirm template
      *
-     * @param  array $template
-     * @return ConfirmTemplateBuilder
+     * @param string $altText
+     * @param array $template
+     * @return TemplateMessageBuilder
+     * @throws MessageBuilderException
      */
     protected function buildConfirmMessage(string $altText, array $template): TemplateMessageBuilder
     {
@@ -97,16 +107,16 @@ class LINEMessageBuilder extends Base
             $template['text'],
             $actions
         );
-        $message = new TemplateMessageBuilder($altText, $buttons, $quickReply);
-
-        return $message;
+        return new TemplateMessageBuilder($altText, $buttons, $quickReply);
     }
 
     /**
      * build carousel template
      *
-     * @param  array $template
-     * @return CarouselTemplateBuilder
+     * @param string $altText
+     * @param array $template
+     * @return TemplateMessageBuilder
+     * @throws MessageBuilderException
      */
     protected function buildCarouselMessage(string $altText, array $template): TemplateMessageBuilder
     {
@@ -148,11 +158,12 @@ class LINEMessageBuilder extends Base
         $quickReply = $this->buildQuickReply($template);
 
         $carousel = new CarouselTemplateBuilder($columns, $template['imageAspectRatio'], $template['imageSize']);
-        $message = new TemplateMessageBuilder($altText, $carousel, $quickReply);
-
-        return $message;
+        return new TemplateMessageBuilder($altText, $carousel, $quickReply);
     }
 
+    /**
+     * @throws MessageBuilderException
+     */
     protected function buildImageCarouselMessage(string $altText, array $template): TemplateMessageBuilder
     {
         $this->validate(
@@ -174,11 +185,12 @@ class LINEMessageBuilder extends Base
         $quickReply = $this->buildQuickReply($template);
 
         $imageCarousel = new ImageCarouselTemplateBuilder($columns);
-        $message = new TemplateMessageBuilder($altText, $imageCarousel, $quickReply);
-
-        return $message;
+        return new TemplateMessageBuilder($altText, $imageCarousel, $quickReply);
     }
 
+    /**
+     * @throws MessageBuilderException
+     */
     protected function buildImageMapMessage(string $altText, array $template): ImagemapMessageBuilder
     {
         $this->validate(
@@ -200,8 +212,8 @@ class LINEMessageBuilder extends Base
         $baseSize = $this->getImageMapBaseSize($template['baseSize']);
 
         $videoBuilder = (isset($template['video']))
-        ? $this->getImageMapVideoBuilder($template['video'])
-        : null;
+            ? $this->getImageMapVideoBuilder($template['video'])
+            : null;
 
         $actions = [];
         foreach ($template['actions'] as $action) {
@@ -210,7 +222,7 @@ class LINEMessageBuilder extends Base
 
         $quickReply = $this->buildQuickReply($template);
 
-        $message = new ImagemapMessageBuilder(
+        return new ImagemapMessageBuilder(
             $baseUrl,
             $altText,
             $baseSize,
@@ -218,10 +230,11 @@ class LINEMessageBuilder extends Base
             $quickReply,
             $videoBuilder
         );
-
-        return $message;
     }
 
+    /**
+     * @throws MessageBuilderException
+     */
     protected function buildAudioMessage(array $template): AudioMessageBuilder
     {
         $this->validate($template, ['originalContentUrl' => 'required', 'duration' => 'required|numeric']);
@@ -229,6 +242,9 @@ class LINEMessageBuilder extends Base
         return new AudioMessageBuilder($template['originalContentUrl'], $template['duration'], $quickReply);
     }
 
+    /**
+     * @throws MessageBuilderException
+     */
     protected function buildVideoMessage(array $template): VideoMessageBuilder
     {
         $this->validate($template, ['originalContentUrl' => 'required', 'previewImageUrl' => 'required']);
@@ -236,6 +252,9 @@ class LINEMessageBuilder extends Base
         return new VideoMessageBuilder($template['originalContentUrl'], $template['previewImageUrl'], $quickReply);
     }
 
+    /**
+     * @throws MessageBuilderException
+     */
     protected function buildImageMessage(array $template): ImageMessageBuilder
     {
         $this->validate($template, ['originalContentUrl' => 'required', 'previewImageUrl' => 'required']);
@@ -243,6 +262,9 @@ class LINEMessageBuilder extends Base
         return new ImageMessageBuilder($template['originalContentUrl'], $template['previewImageUrl'], $quickReply);
     }
 
+    /**
+     * @throws MessageBuilderException
+     */
     protected function buildStickerMessage(array $template): StickerMessageBuilder
     {
         $this->validate($template, ['packageId' => 'required|integer', 'stickerId' => 'required|integer']);
@@ -250,6 +272,9 @@ class LINEMessageBuilder extends Base
         return new StickerMessageBuilder($template['packageId'], $template['stickerId'], $quickReply);
     }
 
+    /**
+     * @throws MessageBuilderException
+     */
     protected function buildLocationMessage(array $template): LocationMessageBuilder
     {
         $this->validate(
@@ -271,6 +296,9 @@ class LINEMessageBuilder extends Base
         );
     }
 
+    /**
+     * @throws MessageBuilderException
+     */
     protected function buildTextMessage(array $template): TextMessageBuilder
     {
         $this->validate($template, ['text' => 'required|max:2000']);
@@ -278,10 +306,15 @@ class LINEMessageBuilder extends Base
         return new TextMessageBuilder($template['text'], $quickReply);
     }
 
+    /**
+     * @throws MessageBuilderException
+     */
     protected function buildMultiMessage(string $altText, array $messageList): MultiMessageBuilder
     {
         if (count($messageList) > self::MULTI_MESSAGE_LIMIT) {
-            throw new MessageBuilderException('You can only combine ' . self::MULTI_MESSAGE_LIMIT . ' messages at a time');
+            throw new MessageBuilderException('You can only combine ' .
+                self::MULTI_MESSAGE_LIMIT .
+                ' messages at a time');
         }
         $builder = new MultiMessageBuilder();
 
@@ -297,7 +330,8 @@ class LINEMessageBuilder extends Base
             if (in_array($type, $generalTypes)) {
                 $builder->add(
                     call_user_func(
-                        [$this, 'build' . ucfirst(Str::camel($type)) . 'Message'], $message
+                        [$this, 'build' . ucfirst(Str::camel($type)) . 'Message'],
+                        $message
                     )
                 );
             } elseif (in_array($type, $templateTypes)) {
@@ -306,7 +340,9 @@ class LINEMessageBuilder extends Base
                 }
                 $builder->add(
                     call_user_func(
-                        [$this, 'build' . ucfirst(Str::camel($type)) . 'Message'], $altText, $message
+                        [$this, 'build' . ucfirst(Str::camel($type)) . 'Message'],
+                        $altText,
+                        $message
                     )
                 );
             }
@@ -314,6 +350,9 @@ class LINEMessageBuilder extends Base
         return $builder;
     }
 
+    /**
+     * @throws MessageBuilderException
+     */
     protected function buildFlexMessage(string $altText, array $template): FlexMessageBuilder
     {
         $boxValidationRule = [];
@@ -334,21 +373,21 @@ class LINEMessageBuilder extends Base
         }
 
         $this->validate(
-            $template, [
-            'type' => 'required|in:bubble,carousel',
-            'styles' => 'nullable|array',
-            'contents' => 'required_if:type,carousel|array|max:10',
-            'contents.*.styles' => 'nullable|array',
+            $template,
+            [
+                'type' => 'required|in:bubble,carousel',
+                'styles' => 'nullable|array',
+                'contents' => 'required_if:type,carousel|array|max:10',
+                'contents.*.styles' => 'nullable|array',
             ] + $boxValidationRule
         );
 
-        $flex = new LINEFlexMessageBuilder($template['type']);
+        $flex = new LINEFlexContainerBuilder($template['type']);
         $flex->createComponents($template);
 
         $container = $flex->getContainer();
         $quickReply = $this->buildQuickReply($template);
 
-        $builder = new FlexMessageBuilder($altText, $container, $quickReply);
-        return $builder;
+        return new FlexMessageBuilder($altText, $container, $quickReply);
     }
 }

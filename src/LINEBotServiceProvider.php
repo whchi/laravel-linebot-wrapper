@@ -4,12 +4,12 @@ namespace Whchi\LaravelLineBotWrapper;
 
 use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\ServiceProvider;
-use Whchi\LaravelLineBotWrapper\LINEBotContext;
+use LINE\LINEBot;
+use LINE\LINEBot\HTTPClient;
+use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 
 class LINEBotServiceProvider extends ServiceProvider
 {
-    protected $defer = true;
-
     /**
      * Bootstrap the application services.
      *
@@ -33,18 +33,17 @@ class LINEBotServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(HTTPClient::class, function ($app) {
+            return new CurlHTTPClient(config('linebot.channel_access_token'));
+        });
+        $this->app->singleton(LINEBot::class, function ($app) {
+            return new LINEBot($app->make(HTTPClient::class), ['channelSecret' => config('linebot.channel_secret')]);
+        });
         $this->app->singleton(
             'LINEBotContext',
             function ($app) {
-                return new LINEBotContext;
+                return new LINEBotContext(LINEBot::class);
             }
         );
-    }
-
-    public function provides()
-    {
-        return [
-            'LINEBotContext',
-        ];
     }
 }

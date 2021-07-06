@@ -9,10 +9,8 @@
     ],
     "type": "library",
     "require": {
-        "php": "^7.2",
-        "predis/predis": "^1",
-        "linecorp/line-bot-sdk": "^4",
-        "illuminate/support": "^7"
+        "php": ">=7.2",
+        "linecorp/line-bot-sdk": "^7"
     },
     "license": "MIT",
     "authors": [
@@ -27,11 +25,36 @@
           "Whchi\\LaravelLineBotWrapper\\": "src/"
         }
       },
+    "autoload-dev": {
+        "psr-4": {
+            "Whchi\\LaravelLineBotWrapper\\Tests\\": "tests/"
+        }
+    },
       "extra": {
           "laravel":{
               "providers":[
                   "Whchi\\LaravelLineBotWrapper\\LINEBotServiceProvider"
               ]
           }
-      }
+      },
+    "scripts": {
+        "post-autoload-dump": [
+            "@php ./vendor/bin/testbench package:discover --ansi"
+        ],
+        "test": [
+            "./vendor/bin/testbench package:test"
+        ],
+        "phpcs": [
+            "phpcs"
+        ],
+        "phpcbf": [
+            "phpcbf"
+        ]
+    },
+    "require-dev": {
+        "orchestra/testbench": "7.0.x-dev",
+        "nunomaduro/collision": "^5.3",
+        "mockery/mockery": "1.4.x-dev",
+        "squizlabs/php_codesniffer": "*"
+    }
 }

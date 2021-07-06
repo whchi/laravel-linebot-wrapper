@@ -1,29 +1,28 @@
-
 <?php
 $template = [
     'type' => 'bubble',
     'styles' =>
-    [
-        'body' => [
-            'backgroundColor' => '#000000',
+        [
+            'body' => [
+                'backgroundColor' => '#000000',
+            ],
+            'hero' => [
+                'separator' => true,
+            ],
         ],
-        'hero' => [
-            'separator' => true,
-        ],
-    ],
     'header' => [
         "type" => "box",
         "layout" => "horizontal",
         "contents" =>
-        [
             [
-                "type" => "text",
-                "text" => "Hello get me a cup of coffee",
-                "weight" => "bold",
-                "color" => "#aaaaaa",
-                "size" => "sm",
+                [
+                    "type" => "text",
+                    "text" => "Hello get me a cup of coffee",
+                    "weight" => "bold",
+                    "color" => "#aaaaaa",
+                    "size" => "sm",
+                ],
             ],
-        ],
     ],
     'hero' => [
         'type' => 'image',
@@ -41,143 +40,143 @@ $template = [
         'type' => 'box',
         'layout' => 'vertical',
         'contents' =>
-        [
             [
-                'type' => 'text',
-                'text' => 'Brown Cafe',
-                'weight' => 'bold',
-                'size' => 'xl',
-            ],
-            [
-                'type' => 'box',
-                'layout' => 'baseline',
-                'margin' => 'md',
-                'contents' =>
                 [
-                    [
-                        'type' => 'icon',
-                        'size' => 'sm',
-                        'url' => 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png',
-                    ],
-                    [
-                        'type' => 'icon',
-                        'size' => 'sm',
-                        'url' => 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png',
-                    ],
-                    [
-                        'type' => 'icon',
-                        'size' => 'sm',
-                        'url' => 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png',
-                    ],
-                    [
-                        'type' => 'icon',
-                        'size' => 'sm',
-                        'url' => 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png',
-                    ],
-                    [
-                        'type' => 'icon',
-                        'size' => 'sm',
-                        'url' => 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png',
-                    ],
-                    [
-                        'type' => 'text',
-                        'text' => '4.0',
-                        'size' => 'sm',
-                        'color' => '#999999',
-                        'margin' => 'md',
-                        'flex' => 0,
-                    ],
+                    'type' => 'text',
+                    'text' => 'Brown Cafe',
+                    'weight' => 'bold',
+                    'size' => 'xl',
                 ],
-            ],
-            [
-                'type' => 'box',
-                'layout' => 'vertical',
-                'margin' => 'lg',
-                'spacing' => 'sm',
-                'contents' =>
                 [
-                    [
-                        'type' => 'box',
-                        'layout' => 'baseline',
-                        'spacing' => 'sm',
-                        'contents' =>
+                    'type' => 'box',
+                    'layout' => 'baseline',
+                    'margin' => 'md',
+                    'contents' =>
                         [
                             [
-                                'type' => 'text',
-                                'text' => 'Place',
-                                'color' => '#aaaaaa',
+                                'type' => 'icon',
                                 'size' => 'sm',
-                                'flex' => 1,
+                                'url' => 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png',
+                            ],
+                            [
+                                'type' => 'icon',
+                                'size' => 'sm',
+                                'url' => 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png',
+                            ],
+                            [
+                                'type' => 'icon',
+                                'size' => 'sm',
+                                'url' => 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png',
+                            ],
+                            [
+                                'type' => 'icon',
+                                'size' => 'sm',
+                                'url' => 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png',
+                            ],
+                            [
+                                'type' => 'icon',
+                                'size' => 'sm',
+                                'url' => 'https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png',
                             ],
                             [
                                 'type' => 'text',
-                                'text' => 'Miraina Tower, 4-1-6 Shinjuku, Tokyo',
-                                'wrap' => true,
-                                'color' => '#666666',
+                                'text' => '4.0',
                                 'size' => 'sm',
-                                'flex' => 5,
+                                'color' => '#999999',
+                                'margin' => 'md',
+                                'flex' => 0,
                             ],
                         ],
-                    ],
-                    [
-                        'type' => 'box',
-                        'layout' => 'baseline',
-                        'spacing' => 'sm',
-                        'contents' =>
+                ],
+                [
+                    'type' => 'box',
+                    'layout' => 'vertical',
+                    'margin' => 'lg',
+                    'spacing' => 'sm',
+                    'contents' =>
                         [
                             [
-                                'type' => 'text',
-                                'text' => 'Time',
-                                'color' => '#aaaaaa',
-                                'size' => 'sm',
-                                'flex' => 1,
+                                'type' => 'box',
+                                'layout' => 'baseline',
+                                'spacing' => 'sm',
+                                'contents' =>
+                                    [
+                                        [
+                                            'type' => 'text',
+                                            'text' => 'Place',
+                                            'color' => '#aaaaaa',
+                                            'size' => 'sm',
+                                            'flex' => 1,
+                                        ],
+                                        [
+                                            'type' => 'text',
+                                            'text' => 'Miraina Tower, 4-1-6 Shinjuku, Tokyo',
+                                            'wrap' => true,
+                                            'color' => '#666666',
+                                            'size' => 'sm',
+                                            'flex' => 5,
+                                        ],
+                                    ],
                             ],
                             [
-                                'type' => 'text',
-                                'text' => '10:00 - 23:00',
-                                'wrap' => true,
-                                'color' => '#666666',
-                                'size' => 'sm',
-                                'flex' => 5,
-                            ],
+                                'type' => 'box',
+                                'layout' => 'baseline',
+                                'spacing' => 'sm',
+                                'contents' =>
+                                    [
+                                        [
+                                            'type' => 'text',
+                                            'text' => 'Time',
+                                            'color' => '#aaaaaa',
+                                            'size' => 'sm',
+                                            'flex' => 1,
+                                        ],
+                                        [
+                                            'type' => 'text',
+                                            'text' => '10:00 - 23:00',
+                                            'wrap' => true,
+                                            'color' => '#666666',
+                                            'size' => 'sm',
+                                            'flex' => 5,
+                                        ],
 
+                                    ],
+                            ],
                         ],
-                    ],
                 ],
             ],
-        ],
     ],
     'footer' => [
         'type' => 'box',
         'layout' => 'vertical',
         'spacing' => 'sm',
         'contents' =>
-        [
             [
-                'type' => 'button',
-                'style' => 'link',
-                'height' => 'sm',
-                'action' => [
-                    'type' => 'uri',
-                    'label' => 'CALL',
-                    'uri' => 'https://linecorp.com',
+                [
+                    'type' => 'button',
+                    'style' => 'link',
+                    'height' => 'sm',
+                    'action' => [
+                        'type' => 'uri',
+                        'label' => 'CALL',
+                        'uri' => 'https://linecorp.com',
+                    ],
+                ],
+                [
+                    'type' => 'button',
+                    'style' => 'link',
+                    'height' => 'sm',
+                    'action' => [
+                        'type' => 'uri',
+                        'label' => 'WEBSITE',
+                        'uri' => 'https://linecorp.com',
+                    ],
+                ],
+                [
+                    'type' => 'spacer',
+                    'size' => 'sm',
                 ],
             ],
-            [
-                'type' => 'button',
-                'style' => 'link',
-                'height' => 'sm',
-                'action' => [
-                    'type' => 'uri',
-                    'label' => 'WEBSITE',
-                    'uri' => 'https://linecorp.com',
-                ],
-            ],
-            [
-                'type' => 'spacer',
-                'size' => 'sm',
-            ],
-        ],
         'flex' => 0,
     ],
 ];

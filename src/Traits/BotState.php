@@ -4,7 +4,6 @@ namespace Whchi\LaravelLineBotWrapper\Traits;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
-use Whchi\LaravelLineBotWrapper\Exceptions\BotStateException;
 
 trait BotState
 {
@@ -45,18 +44,14 @@ trait BotState
     }
 
     /**
-     * 取得 state by key
+     * get state by key
      *
-     * @param  string $key parent.child
-     * @return array state data
+     * @param string $key parent.child
      */
     public function getState(string $key)
     {
         $data = Cache::get($this->botSessionId);
-        if (array_key_exists($key, $data)) {
-            return $data[$key];
-        }
-        throw new BotStateException('method ' . __FUNCTION__ . ' error: undefined index "' . $key . '" in state');
+        return Arr::get($data, $key);
     }
 
     public function resetState()

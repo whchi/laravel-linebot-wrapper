@@ -6,13 +6,13 @@ use Whchi\LaravelLineBotWrapper\Abstracts\InteractWithAttribute;
 
 class FlexComponentType extends InteractWithAttribute
 {
-    const BOX = 'box';
-    const BUTTON = 'button';
-    const FILLER = 'filler';
-    const ICON = 'icon';
-    const IMAGE = 'image';
-    const SEPARATOR = 'separator';
-    const SPACER = 'spacer';
-    const TEXT = 'text';
-    const SPAN = 'span';
+    public const BOX = 'box';
+    public const BUTTON = 'button';
+    public const FILLER = 'filler';
+    public const ICON = 'icon';
+    public const IMAGE = 'image';
+    public const SEPARATOR = 'separator';
+    public const SPACER = 'spacer';
+    public const TEXT = 'text';
+    public const SPAN = 'span';
 }

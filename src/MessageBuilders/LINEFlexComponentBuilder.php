@@ -1,6 +1,6 @@
 <?php
 
-namespace Whchi\LaravelLineBotWrapper\Core\MessageBuilders\FlexMessageBuilder;
+namespace Whchi\LaravelLineBotWrapper\MessageBuilders;
 
 use LINE\LINEBot\MessageBuilder\Flex\BlockStyleBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\BubbleStylesBuilder;
@@ -11,16 +11,16 @@ use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\FillerComponentBuilder as 
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\IconComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\ImageComponentBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SeparatorComponentBuilder as SeparatorLayout;
-use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\SpacerComponentBuilder as SpacerLayout;
 use LINE\LINEBot\MessageBuilder\Flex\ComponentBuilder\TextComponentBuilder;
 use Whchi\LaravelLineBotWrapper\Constant\FlexComponentType;
 use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
-use Whchi\LaravelLineBotWrapper\Traits\MessageBuilder;
 
-class LINEFlexComponentBuilder
+class LINEFlexComponentBuilder extends Base
 {
-    use MessageBuilder;
-
+    /**
+     * @throws \ReflectionException
+     * @throws MessageBuilderException
+     */
     public function setComponentTemplate(array $blockTemplate): ComponentBuilder
     {
         // avoid invalid key error
@@ -32,13 +32,15 @@ class LINEFlexComponentBuilder
         }
         return call_user_func([$this, 'set' . ucfirst($type) . 'Layout'], $blockTemplate);
     }
+
     /**
      * Flex message component block style
      *
      * @see https://developers.line.biz/en/reference/messaging-api/#style-setting-objects
      *
-     * @param  array $styles
+     * @param array $styles
      * @return BubbleStylesBuilder
+     * @throws MessageBuilderException
      */
     public function setComponentStyle(array $styles): BubbleStylesBuilder
     {
@@ -52,7 +54,8 @@ class LINEFlexComponentBuilder
                     call_user_func([$blockStyle, 'set' . ucfirst($k)], $v);
                 }
                 return $blockStyle;
-            }, $styles
+            },
+            $styles
         );
 
         $builder = BubbleStylesBuilder::builder();
@@ -66,23 +69,36 @@ class LINEFlexComponentBuilder
 
         return $builder;
     }
+
     /**
      * Flex message component type "text"
      *
      * @see https://developers.line.biz/en/reference/messaging-api/#f-text
      *
-     * @param  array $template
+     * @param array $template
      * @return TextComponentBuilder
+     * @throws MessageBuilderException
      */
     private function setTextLayout(array $template): TextComponentBuilder
     {
-        $builder = TextComponentBuilder::builder()->setText($template['text']);
+        $builder = TextComponentBuilder::builder()
+                                       ->setText($template['text']);
         unset($template['text']);
 
         foreach ($template as $idx => $ele) {
             if (!in_array(
-                $idx, [
-                'flex', 'margin', 'size', 'align', 'gravity', 'maxLines', 'weight', 'color', 'action', 'wrap',
+                $idx,
+                [
+                    'flex',
+                    'margin',
+                    'size',
+                    'align',
+                    'gravity',
+                    'maxLines',
+                    'weight',
+                    'color',
+                    'action',
+                    'wrap',
                 ]
             )
             ) {
@@ -104,18 +120,28 @@ class LINEFlexComponentBuilder
      *
      * @see https://developers.line.biz/en/reference/messaging-api/#f-image
      *
-     * @param  array $template
+     * @param array $template
      * @return ImageComponentBuilder
      */
     private function setImageLayout(array $template): ImageComponentBuilder
     {
-        $builder = ImageComponentBuilder::builder()->setUrl($template['url']);
+        $builder = ImageComponentBuilder::builder()
+                                        ->setUrl($template['url']);
         unset($template['url']);
 
         foreach ($template as $idx => $ele) {
             if (!in_array(
-                $idx, [
-                'flex', 'margin', 'size', 'align', 'gravity', 'aspectRatio', 'aspectMode', 'backgroundColor', 'action',
+                $idx,
+                [
+                    'flex',
+                    'margin',
+                    'size',
+                    'align',
+                    'gravity',
+                    'aspectRatio',
+                    'aspectMode',
+                    'backgroundColor',
+                    'action',
                 ]
             )
             ) {
@@ -138,7 +164,7 @@ class LINEFlexComponentBuilder
      *
      * @see https://developers.line.biz/en/reference/messaging-api/#button
      *
-     * @param  array $template
+     * @param array $template
      * @return ButtonComponentBuilder
      */
     private function setButtonLayout(array $template): ButtonComponentBuilder
@@ -162,12 +188,13 @@ class LINEFlexComponentBuilder
      *
      * @see https://developers.line.biz/en/reference/messaging-api/#icon
      *
-     * @param  array $template
+     * @param array $template
      * @return IconComponentBuilder
      */
     private function setIconLayout(array $template): IconComponentBuilder
     {
-        $builder = IconComponentBuilder::builder()->setUrl($template['url']);
+        $builder = IconComponentBuilder::builder()
+                                       ->setUrl($template['url']);
         unset($template['url']);
 
         foreach ($template as $idx => $ele) {
@@ -185,12 +212,13 @@ class LINEFlexComponentBuilder
      *
      * @see https://developers.line.biz/en/reference/messaging-api/#box
      *
-     * @param  array $template
+     * @param array $template
      * @return BoxLayout
      */
     private function setBoxLayout(array $template): BoxLayout
     {
-        $builder = BoxLayout::builder()->setLayout($template['layout']);
+        $builder = BoxLayout::builder()
+                            ->setLayout($template['layout']);
 
         $contents = [];
         if (!is_array($template['contents'])) {
@@ -219,12 +247,13 @@ class LINEFlexComponentBuilder
 
         return $builder;
     }
+
     /**
      * Flex message component type "filler"
      *
      * @see https://developers.line.biz/en/reference/messaging-api/#filler
      *
-     * @param  array $template
+     * @param array $template
      * @return FillerLayout
      */
     private function setFillerLayout(array $template): FillerLayout
@@ -237,7 +266,7 @@ class LINEFlexComponentBuilder
      *
      * @see https://developers.line.biz/en/reference/messaging-api/#separator
      *
-     * @param  array $template
+     * @param array $template
      * @return SeparatorLayout
      */
     private function setSeparatorLayout(array $template): SeparatorLayout
@@ -249,23 +278,6 @@ class LINEFlexComponentBuilder
                 throw new MessageBuilderException('Invalid SeparatorLayout type: ' . $idx);
             }
             call_user_func([$builder, 'set' . ucfirst($idx)], $ele);
-        }
-        return $builder;
-    }
-
-    /**
-     * Flex message component type "spacer"
-     *
-     * @see https://developers.line.biz/en/reference/messaging-api/#spacer
-     *
-     * @param  array $template
-     * @return SpacerLayout
-     */
-    private function setSpacerLayout(array $template): SpacerLayout
-    {
-        $builder = SpacerLayout::builder();
-        if (isset($template['size'])) {
-            $builder->setSize($template['size']);
         }
         return $builder;
     }

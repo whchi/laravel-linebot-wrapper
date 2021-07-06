@@ -6,10 +6,10 @@ use Whchi\LaravelLineBotWrapper\Abstracts\InteractWithAttribute;
 
 class GeneralMessageType extends InteractWithAttribute
 {
-    const TEXT = 'text';
-    const STICKER = 'sticker';
-    const LOCATION = 'location';
-    const IMAGE = 'image';
-    const AUDIO = 'audio';
-    const VIDEO = 'video';
+    public const TEXT = 'text';
+    public const STICKER = 'sticker';
+    public const LOCATION = 'location';
+    public const IMAGE = 'image';
+    public const AUDIO = 'audio';
+    public const VIDEO = 'video';
 }

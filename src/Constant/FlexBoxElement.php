@@ -6,8 +6,8 @@ use Whchi\LaravelLineBotWrapper\Abstracts\InteractWithAttribute;
 
 class FlexBoxElement extends InteractWithAttribute
 {
-    const HEADER = 'header';
-    const BODY = 'body';
-    const FOOTER = 'footer';
-    const HERO = 'hero';
+    public const HEADER = 'header';
+    public const BODY = 'body';
+    public const FOOTER = 'footer';
+    public const HERO = 'hero';
 }

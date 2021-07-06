@@ -1,16 +1,15 @@
 <?php
 
-namespace Whchi\LaravelLineBotWrapper\Core\MessageBuilders\FlexMessageBuilder;
+namespace Whchi\LaravelLineBotWrapper\MessageBuilders;
 
 use LINE\LINEBot\Constant\Flex\ContainerType;
-use LINE\LINEBot\MessageBuilder\FlexMessageBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\BubbleContainerBuilder;
 use LINE\LINEBot\MessageBuilder\Flex\ContainerBuilder\CarouselContainerBuilder;
 use Whchi\LaravelLineBotWrapper\Constant\FlexBoxElement;
 use Whchi\LaravelLineBotWrapper\Exceptions\MessageBuilderException;
 
-class LINEFlexMessageBuilder
+class LINEFlexContainerBuilder
 {
     /**
      * Flex message container
@@ -43,13 +42,19 @@ class LINEFlexMessageBuilder
         return $this->bubbleContainer;
     }
 
+    /**
+     * @param array $template
+     * @return BubbleContainerBuilder|CarouselContainerBuilder
+     * @throws MessageBuilderException
+     * @throws \ReflectionException
+     */
     public function createComponents(array $template)
     {
         switch ($this->templateType) {
-        case ContainerType::BUBBLE:
-            return $this->setBubbleTemplate($template);
-        case ContainerType::CAROUSEL:
-            return $this->setCarouselTemplate($template);
+            case ContainerType::BUBBLE:
+                return $this->setBubbleTemplate($template);
+            case ContainerType::CAROUSEL:
+                return $this->setCarouselTemplate($template);
         }
     }
 
@@ -58,6 +63,9 @@ class LINEFlexMessageBuilder
         $this->templateType = $type;
     }
 
+    /**
+     * @throws MessageBuilderException|\ReflectionException
+     */
     private function setBubbleTemplate(array $template): BubbleContainerBuilder
     {
         // avoid invalid key error
@@ -67,17 +75,20 @@ class LINEFlexMessageBuilder
         $flexTypes = FlexBoxElement::getConstants();
         foreach ($template as $idx => $ele) {
             if (in_array($idx, $flexTypes)) {
-                call_user_func([$this->bubbleContainer, 'set' . ucfirst($idx)], $this->componentBuilder->setComponentTemplate($ele));
+                call_user_func(
+                    [$this->bubbleContainer, 'set' . ucfirst($idx)],
+                    $this->componentBuilder->setComponentTemplate($ele)
+                );
             } else {
                 switch ($idx) {
-                case 'styles':
-                    $this->bubbleContainer->setStyles($this->componentBuilder->setComponentStyle($ele));
-                    break;
-                case 'direction':
-                    $this->bubbleContainer->setDirection($ele);
-                    break;
-                default:
-                    throw new MessageBuilderException('Invalid key in flex-bubble template');
+                    case 'styles':
+                        $this->bubbleContainer->setStyles($this->componentBuilder->setComponentStyle($ele));
+                        break;
+                    case 'direction':
+                        $this->bubbleContainer->setDirection($ele);
+                        break;
+                    default:
+                        throw new MessageBuilderException('Invalid key in flex-bubble template');
                 }
             }
         }
@@ -85,6 +96,12 @@ class LINEFlexMessageBuilder
         return $this->bubbleContainer;
     }
 
+    /**
+     * @param array $template
+     * @return CarouselContainerBuilder
+     * @throws MessageBuilderException
+     * @throws \ReflectionException
+     */
     private function setCarouselTemplate(array $template): CarouselContainerBuilder
     {
         $this->carouselContainer = CarouselContainerBuilder::builder();

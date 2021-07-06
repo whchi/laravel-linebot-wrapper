@@ -4,9 +4,12 @@ namespace Whchi\LaravelLineBotWrapper\Abstracts;
 
 use ReflectionClass;
 
-abstract class InteractWithAttribute
+class InteractWithAttribute
 {
-    final public static function getConstants()
+    /**
+     * @throws \ReflectionException
+     */
+    final public static function getConstants(): array
     {
         return (new ReflectionClass(get_called_class()))->getConstants();
     }

@@ -2,10 +2,6 @@
 
 namespace Whchi\LaravelLineBotWrapper\Tests;
 
-
-use Closure;
-use LINE\LINEBot\HTTPClient\CurlHTTPClient;
-use Mockery as m;
 use ReflectionClass;
 use Whchi\LaravelLineBotWrapper\LINEBotServiceProvider;
 
@@ -22,15 +18,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         $app['config']->set('linebot.channel_access_token', 'token_123456');
         $app['config']->set('linebot.channel_secret', 'secret_123456');
-    }
-
-    public function httpMock(Closure $callback)
-    {
-        $mock = $callback(m::mock(CurlHTTPClient::class, [
-            $this->app['config']->get('linebot.channel_access_token'),
-        ]));
-
-        $this->app->instance(CurlHTTPClient::class, $mock);
     }
 
     /**

@@ -33,7 +33,7 @@ In your webhook entry point
 ```php
 public function __construct()
 {
-    $context = \App::make('LINEBotContext');
+    $context = app('LINEBotContext');
 }
 ...
 public function entryPoint(Request $request)

@@ -171,11 +171,7 @@ $template = [
                         'label' => 'WEBSITE',
                         'uri' => 'https://linecorp.com',
                     ],
-                ],
-                [
-                    'type' => 'spacer',
-                    'size' => 'sm',
-                ],
+                ]
             ],
         'flex' => 0,
     ],

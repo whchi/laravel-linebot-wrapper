@@ -2,10 +2,9 @@
 
 namespace Whchi\LaravelLineBotWrapper\Tests;
 
-use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
+use LINE\LINEBot\Response;
 use Mockery as m;
 use Whchi\LaravelLineBotWrapper\LINEBotContext;
-use Whchi\LaravelLineBotWrapper\Traits\MessageHelper;
 
 class LinebotTest extends TestCase
 {
@@ -23,17 +22,13 @@ class LinebotTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
-    public function it_should_reply_message()
+    public function testReply()
     {
-        $this->bot->shouldReceive('replyText')
-                          ->with('come')
-                          ->once();
-
-        $this->bot->replyText('come');
+        $response = m::mock(Response::class);
+        $this->bot->shouldReceive('sdk')
+                  ->with('replyText', ['reply_token', 'helloworld'])
+                  ->once()
+                  ->andReturn($response);
+        $this->bot->sdk('replyText', ['reply_token', 'helloworld']);
     }
-
-
 }

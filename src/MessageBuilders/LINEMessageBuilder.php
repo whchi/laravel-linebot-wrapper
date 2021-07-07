@@ -57,7 +57,7 @@ class LINEMessageBuilder extends Base
         $actions = [];
 
         foreach ($template['actions'] as $action) {
-            array_push($actions, $this->getAction($action));
+            array_push($actions, $this->makeAction($action));
         }
 
         $template['title'] = $template['title'] ?? null;
@@ -66,7 +66,7 @@ class LINEMessageBuilder extends Base
         $template['imageSize'] = $template['imageSize'] ?? null;
         $template['imageBackgroundColor'] = $template['imageBackgroundColor'] ?? null;
         $defaultAction = (isset($template['defaultAction']))
-            ? $this->getAction($template['defaultAction'])
+            ? $this->makeAction($template['defaultAction'])
             : null;
 
         $quickReply = $this->buildQuickReply($template);
@@ -98,7 +98,7 @@ class LINEMessageBuilder extends Base
         $actions = [];
 
         foreach ($template['actions'] as $action) {
-            array_push($actions, $this->getAction($action));
+            array_push($actions, $this->makeAction($action));
         }
 
         $quickReply = $this->buildQuickReply($template);
@@ -134,7 +134,7 @@ class LINEMessageBuilder extends Base
             $text = $column['text'];
             $actions = [];
             foreach ($column['actions'] as $action) {
-                array_push($actions, $this->getAction($action));
+                array_push($actions, $this->makeAction($action));
             }
 
             $title = $column['title'] ?? null;
@@ -177,7 +177,7 @@ class LINEMessageBuilder extends Base
         $columns = [];
         foreach ($template['columns'] as $column) {
             $imageUri = $column['imageUrl'];
-            $action = $this->getAction($column['action'], true);
+            $action = $this->makeAction($column['action'], true);
 
             array_push($columns, new ImageCarouselColumnTemplateBuilder($imageUri, $action));
         }
@@ -307,7 +307,11 @@ class LINEMessageBuilder extends Base
     }
 
     /**
+     * @param string $altText
+     * @param array $messageList
+     * @return MultiMessageBuilder
      * @throws MessageBuilderException
+     * @throws \ReflectionException
      */
     protected function buildMultiMessage(string $altText, array $messageList): MultiMessageBuilder
     {
@@ -351,7 +355,11 @@ class LINEMessageBuilder extends Base
     }
 
     /**
+     * @param string $altText
+     * @param array $template
+     * @return FlexMessageBuilder
      * @throws MessageBuilderException
+     * @throws \ReflectionException
      */
     protected function buildFlexMessage(string $altText, array $template): FlexMessageBuilder
     {

@@ -142,6 +142,8 @@ trait MessagePusher
     /**
      * Flex message
      *
+     * @param string $altText
+     * @param array $flexTemplate
      * @return void
      * @throws MessageBuilderException
      */

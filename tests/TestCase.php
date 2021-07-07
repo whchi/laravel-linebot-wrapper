@@ -4,9 +4,9 @@ namespace Whchi\LaravelLineBotWrapper\Tests;
 
 
 use Closure;
-use Config;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use Mockery as m;
+use ReflectionClass;
 use Whchi\LaravelLineBotWrapper\LINEBotServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
@@ -30,7 +30,18 @@ class TestCase extends \Orchestra\Testbench\TestCase
             $this->app['config']->get('linebot.channel_access_token'),
         ]));
 
-        $this->app->instance('linebot.http', $mock);
+        $this->app->instance(CurlHTTPClient::class, $mock);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    protected static function getNonPublicMethod($name, $klass)
+    {
+        $class = new ReflectionClass($klass);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method;
     }
 
 }

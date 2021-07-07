@@ -25,7 +25,7 @@ class Base
     /**
      * @throws MessageBuilderException
      */
-    public function buildQuickReply(array $template)
+    protected function buildQuickReply(array $template): ?QuickReplyMessageBuilder
     {
         $quickReply = null;
 
@@ -35,7 +35,7 @@ class Base
                 if ($item['type'] !== 'action') {
                     continue;
                 }
-                $action = $this->getAction($item['action']);
+                $action = $this->makeAction($item['action']);
                 array_push($quickReplyButtons, new QuickReplyButtonBuilder($action, $item['imageUrl']));
             }
             $quickReply = new QuickReplyMessageBuilder($quickReplyButtons);
@@ -47,7 +47,7 @@ class Base
     /**
      * @throws MessageBuilderException
      */
-    public function getAction(array $action, bool $isImageCarousel = false)
+    public function makeAction(array $action, bool $isImageCarousel = false)
     {
         if ($isImageCarousel) {
             $action['label'] = $action['label'] ?? null;

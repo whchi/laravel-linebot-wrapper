@@ -105,7 +105,7 @@ class LINEFlexComponentBuilder extends Base
                 throw new MessageBuilderException('Invalid TextComponent type: ' . $idx);
             }
             if ($idx === 'action') {
-                $action = $this->getAction($ele);
+                $action = $this->makeAction($ele);
                 $builder->setAction($action);
             } else {
                 call_user_func([$builder, 'set' . ucfirst($idx)], $ele);
@@ -122,6 +122,7 @@ class LINEFlexComponentBuilder extends Base
      *
      * @param array $template
      * @return ImageComponentBuilder
+     * @throws MessageBuilderException
      */
     private function setImageLayout(array $template): ImageComponentBuilder
     {
@@ -148,7 +149,7 @@ class LINEFlexComponentBuilder extends Base
                 throw new MessageBuilderException('Invalid ImageComponent type: ' . $idx);
             }
             if ($idx === 'action') {
-                $action = $this->getAction($ele);
+                $action = $this->makeAction($ele);
                 $builder->setAction($action);
             } else {
                 call_user_func([$builder, 'set' . ucfirst($idx)], $ele);
@@ -166,11 +167,12 @@ class LINEFlexComponentBuilder extends Base
      *
      * @param array $template
      * @return ButtonComponentBuilder
+     * @throws MessageBuilderException
      */
     private function setButtonLayout(array $template): ButtonComponentBuilder
     {
         $builder = ButtonComponentBuilder::builder();
-        $action = $this->getAction($template['action']);
+        $action = $this->makeAction($template['action']);
         unset($template['action']);
         $builder->setAction($action);
 
@@ -190,6 +192,7 @@ class LINEFlexComponentBuilder extends Base
      *
      * @param array $template
      * @return IconComponentBuilder
+     * @throws MessageBuilderException
      */
     private function setIconLayout(array $template): IconComponentBuilder
     {
@@ -214,6 +217,7 @@ class LINEFlexComponentBuilder extends Base
      *
      * @param array $template
      * @return BoxLayout
+     * @throws MessageBuilderException|\ReflectionException
      */
     private function setBoxLayout(array $template): BoxLayout
     {
@@ -238,7 +242,7 @@ class LINEFlexComponentBuilder extends Base
                 throw new MessageBuilderException('Invalid BoxLayout type: ' . $idx);
             }
             if ($idx === 'action') {
-                $action = $this->getAction($ele);
+                $action = $this->makeAction($ele);
                 $builder->setAction($action);
             } else {
                 call_user_func([$builder, 'set' . ucfirst($idx)], $ele);
@@ -268,6 +272,7 @@ class LINEFlexComponentBuilder extends Base
      *
      * @param array $template
      * @return SeparatorLayout
+     * @throws MessageBuilderException
      */
     private function setSeparatorLayout(array $template): SeparatorLayout
     {
